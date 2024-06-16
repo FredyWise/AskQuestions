@@ -39,7 +39,7 @@ fun NavGraphBuilder.authenticationNavGraph(
             ) {
                 when (state.bioAuthResource) {
                     is Resource.Error -> {
-                        val error = state.bioAuthResource.message
+                        val error =" state.bioAuthResource.error.name"
                         Toast.makeText(
                             context,
                             "${error}",
@@ -50,7 +50,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                     is Resource.Success -> {
                         Toast.makeText(
                             context,
-                            state.bioAuthResource.data,
+                            "state.bioAuthResource.data",
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.onEvent(
@@ -72,7 +72,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                         viewModel.onEvent(
                             AuthEvent.SignOut
                         )
-                        val error = state.authResource.message
+                        val error = "state.authResource.message"
                         Toast.makeText(
                             context,
                             "${error}",
@@ -119,7 +119,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                         viewModel.onEvent(
                             AuthEvent.SignOut
                         )
-                        val error = state.authResource.message
+                        val error = "state.authResource.message"
                         Toast.makeText(
                             context,
                             "${error}",

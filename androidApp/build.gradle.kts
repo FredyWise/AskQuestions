@@ -75,6 +75,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Coil
+    implementation(libs.coil.compose)
+
     // Advanced Log
     implementation(libs.timber)
 
@@ -94,11 +97,23 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     // Firebase
+    implementation(libs.play.services.auth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.auth.ktx)
+    //
+    implementation(libs.google.firebase.messaging.ktx)
+
+//    // Stream IO
+//    implementation(libs.stream.chat.android.compose)
+//    implementation(libs.stream.chat.android.offline)
+
+    // Retrofit networking
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.converter.gson)
 
     // Hilt
     implementation(libs.hilt.android)

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fredy.askquestions.features.data.apis.ApiConfiguration
 import com.fredy.askquestions.features.ui.screens.chatScreen.ChatScreen
-import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel
+import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatViewModel
 import com.fredy.askquestions.ui.theme.AskQuestionsTheme
 import com.google.ai.client.generativeai.GenerativeModel
 

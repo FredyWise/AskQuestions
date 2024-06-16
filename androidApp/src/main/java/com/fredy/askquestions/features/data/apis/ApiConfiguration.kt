@@ -13,4 +13,8 @@ sealed class ApiConfiguration {
         const val USER_ENTITY = "user"
     }
 
+    object WebClient{
+        const val ID = BuildConfig.WEB_CLIENT_ID
+    }
+
 }

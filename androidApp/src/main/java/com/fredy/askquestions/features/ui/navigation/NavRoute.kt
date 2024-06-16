@@ -45,12 +45,9 @@ object Graph {
 
 val drawerScreens = listOf(
     NavigationRoute.Preferences,
-    NavigationRoute.Export,
-    NavigationRoute.Currency
 )
 
 val bottomBarScreens = listOf(
-    NavigationRoute.Records,
     NavigationRoute.Analysis,
     NavigationRoute.Account,
     NavigationRoute.Categories,
@@ -80,15 +77,9 @@ sealed class NavigationRoute(
         iconNot = Icons.Outlined.HowToReg
     )
 
-    object ForgotPassword: NavigationRoute(
-        route = "forgotPassword",
-        title = "Forgot Password",
-        contentDescription = "Go change password",
-        icon = Icons.Default.Password,
-        iconNot = Icons.Outlined.Password
-    )
 
     //top bar
+
     object Profile: NavigationRoute(
         route = "profile",
         title = "Profile",
@@ -105,28 +96,13 @@ sealed class NavigationRoute(
         iconNot = Icons.Outlined.Settings
     )
 
-    object Export: NavigationRoute(
-        route = "export",
-        title = "Export & Import records",
-        contentDescription = "Go to export screen",
-        icon = Icons.Default.UploadFile,
-        iconNot = Icons.Outlined.UploadFile
-    )
-
-    object Currency: NavigationRoute(
-        route = "currency",
-        title = "Currency",
-        contentDescription = "Go to currency screen",
-        icon = Icons.Default.CurrencyExchange,
-        iconNot = Icons.Outlined.CurrencyExchange
-    )
 
 
     //bottom bar
-    object Records: NavigationRoute(
-        route = "records",
-        title = "Records",
-        contentDescription = "Go to Records Screen",
+    object Chat: NavigationRoute(
+        route = "chat",
+        title = "Chat",
+        contentDescription = "Go to Chat Screen",
         icon = Icons.Default.Receipt,
         iconNot = Icons.Outlined.Receipt
     )

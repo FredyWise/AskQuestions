@@ -7,6 +7,11 @@ plugins {
 }
 
 buildscript {
+
+//    ext{
+//        compose_ui_version = "1.1.1"
+//    }
+
     dependencies {
         classpath(libs.google.services)
         classpath(libs.hilt.android.gradle.plugin)

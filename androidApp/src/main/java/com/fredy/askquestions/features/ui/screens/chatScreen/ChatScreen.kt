@@ -26,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.fredy.askquestions.features.ui.viewmodels.ChatState
+import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatState
 import com.fredy.askquestions.features.domain.models.Message
 
 @Composable

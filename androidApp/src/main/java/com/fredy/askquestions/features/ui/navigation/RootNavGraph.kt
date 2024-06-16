@@ -11,6 +11,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
@@ -41,7 +42,9 @@ fun RootNavGraph(
             route = Graph.MainNav,
             startDestination = Graph.HomeNav,
         ) {
+            composable(Graph.HomeNav){
 
+            }
 
         }
 

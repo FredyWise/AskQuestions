@@ -1,8 +1,12 @@
 [versions]
 agp = "8.4.2"
 businessCalculator = "0.0.1"
+coilCompose = "2.4.0"
+converterMoshi = "2.9.0"
+converterGson = "2.9.0"
 datastorePreferences = "1.1.1"
 firebaseBom = "33.1.0"
+firebaseMessagingKtx = "24.0.0"
 generativeai = "0.8.0"
 googleServices = "4.4.2"
 hiltAndroid = "2.50"
@@ -21,6 +25,10 @@ lifecycleViewmodelCompose = "2.8.2"
 pagingCompose = "3.3.0"
 pagingCommonKtx = "3.3.0"
 pagingRuntimeKtx = "3.3.0"
+playServicesAuth = "21.2.0"
+retrofit = "2.9.0"
+streamChatAndroidCompose = "6.0.8"
+streamChatAndroidOffline = "6.0.8"
 timber = "4.7.1"
 lifecycleRuntimeComposeAndroid = "2.8.2"
 
@@ -35,12 +43,16 @@ androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", ver
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 business-calculator = { module = "com.github.fredywise.simpleseries:business-calculator", version.ref = "businessCalculator" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
 generativeai = { module = "com.google.ai.client.generativeai:generativeai", version.ref = "generativeai" }
+google-firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
@@ -58,6 +70,10 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+stream-chat-android-compose = { module = "io.getstream:stream-chat-android-compose", version.ref = "streamChatAndroidCompose" }
+stream-chat-android-offline = { module = "io.getstream:stream-chat-android-offline", version.ref = "streamChatAndroidOffline" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 
