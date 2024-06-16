@@ -122,7 +122,7 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.VerifyPhoneNumber -> {
                 viewModelScope.launch {
                     authUseCases.verifyPhoneNumber(
-                        event.context,
+//                        event.context,
                         storedVerificationId.value,
                         event.code
                     ).collect { result ->

@@ -15,7 +15,6 @@ class VerifyPhoneNumber(
     private val firebaseAuth: FirebaseAuth
 ) {
     operator fun invoke(
-        context: Context,
         verificationId: String,
         code: String
     ): Flow<Resource<AuthResult, DataError.Authentication>> {

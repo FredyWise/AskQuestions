@@ -11,7 +11,7 @@ class InsertUser(
     suspend operator fun invoke(user: User) {
         val isExist = userRepository.getUser(user.uid).firstOrNull()
         Timber.i("InsertUser.Data: $isExist")
-        if (!isExist.isNotNull()) {
+        if (isExist != null) {
             userRepository.upsertUser(user)
         }
     }

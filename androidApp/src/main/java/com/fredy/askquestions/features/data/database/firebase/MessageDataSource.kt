@@ -19,7 +19,8 @@ import timber.log.Timber
 interface MessageDataSource {
     suspend fun upsertMessage(message: Message)
     suspend fun deleteMessage(message: Message)
-    suspend fun searchMessages(message: String,userId:String): Flow<List<Message>>
+    suspend fun getMessagesFromChat(chatId: String): Flow<List<Message>>
+    suspend fun searchMessages(text: String,userId:String): Flow<List<Message>>
 }
 
 class MessageDataSourceImpl(
@@ -48,21 +49,46 @@ class MessageDataSourceImpl(
         }
     }
 
-    override suspend fun searchMessages(message: String, userId:String): Flow<List<Message>> {
+    override suspend fun getMessagesFromChat(
+        chatId: String
+    ): Flow<List<Message>> {
         return withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = messageCollection.where(
                     Filter.arrayContains(
-                        "message", message
+                        "chatId", chatId
                     )
                 ).orderBy(
-                    "message", Query.Direction.ASCENDING
+                    "timestamp", Query.Direction.ASCENDING
                 ).snapshots()
 
                 querySnapshot.map { it.toObjects<Message>() }
             } catch (e: Exception) {
                 Timber.e(
-                    "Failed to get all message: $e"
+                    "Failed to get all message: ${e.message}"
+                )
+                throw e
+            }
+
+        }
+    }
+
+
+    override suspend fun searchMessages(text: String, userId:String): Flow<List<Message>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val querySnapshot = messageCollection.where(
+                    Filter.arrayContains(
+                        "text", text
+                    )
+                ).orderBy(
+                    "timestamp", Query.Direction.ASCENDING
+                ).snapshots()
+
+                querySnapshot.map { it.toObjects<Message>() }
+            } catch (e: Exception) {
+                Timber.e(
+                    "Failed to get all message: ${e.message}"
                 )
                 throw e
             }

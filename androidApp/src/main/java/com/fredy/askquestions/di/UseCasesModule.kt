@@ -37,7 +37,7 @@ object UseCasesModule {
     @Singleton
     fun provideAuthUseCases(
         firebaseAuth: FirebaseAuth,
-        oneTapClient: SignInClient,
+//        oneTapClient: SignInClient,
     ): AuthUseCases = AuthUseCases(
         updateUserInformation = UpdateUserInformation(firebaseAuth),
         googleSignIn = GoogleSignIn(firebaseAuth),

@@ -74,7 +74,7 @@ class ChatDataSourceImpl(
                 querySnapshot.map { it.toObjects<Chat>() }
             } catch (e: Exception) {
                 Timber.e(
-                    "Failed to get all chat: $e"
+                    "Failed to get all chat: ${e.message}"
                 )
                 throw e
             }
@@ -96,7 +96,7 @@ class ChatDataSourceImpl(
                 querySnapshot.map { it.toObjects<Chat>() }
             } catch (e: Exception) {
                 Timber.e(
-                    "Failed to get all chat: $e"
+                    "Failed to get all chat: ${e.message}"
                 )
                 throw e
             }

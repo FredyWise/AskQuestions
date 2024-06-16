@@ -44,7 +44,7 @@ fun ChatScreen(
         ) {
             items(messages) { message ->
                 MessageBubble(
-                    text = message.message,
+                    text = message.text,
                     isUser = message.senderId == state.currentUserId
                 )
             }

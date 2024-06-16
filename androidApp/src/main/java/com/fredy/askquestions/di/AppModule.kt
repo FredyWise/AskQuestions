@@ -18,6 +18,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Provides
+    @Singleton
     fun provideGenerativeModel(): GenerativeModel {
         return GenerativeModel(modelName = ApiConfiguration.GeminiModel.FLASH_MODEL_1_5, apiKey = ApiConfiguration.GeminiModel.API_KEY)
     }

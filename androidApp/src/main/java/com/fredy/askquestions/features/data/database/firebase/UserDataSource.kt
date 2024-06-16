@@ -66,7 +66,7 @@ class UserDataSourceImpl(
                 querySnapshot.map { it.toObjects<User>() }
             } catch (e: Exception) {
                 Timber.e(
-                    "Failed to get all user: $e"
+                    "Failed to get all user: ${e.message}"
                 )
                 throw e
             }
@@ -92,7 +92,7 @@ class UserDataSourceImpl(
                 querySnapshot.map { it.toObjects<User>() }
             } catch (e: Exception) {
                 Timber.e(
-                    "Failed to get all user: $e"
+                    "Failed to get all user: ${e.message}"
                 )
                 throw e
             }

@@ -2,6 +2,8 @@ package com.fredy.askquestions.di
 
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSourceImpl
+import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
+import com.fredy.askquestions.features.data.database.firebase.MessageDataSourceImpl
 import com.fredy.askquestions.features.data.database.firebase.UserDataSource
 import com.fredy.askquestions.features.data.database.firebase.UserDataSourceImpl
 import com.google.firebase.firestore.FirebaseFirestore
@@ -66,6 +68,12 @@ object DataModule {
     @Provides
     @Singleton
     fun provideChatDataSource(firestore: FirebaseFirestore): ChatDataSource = ChatDataSourceImpl(
+        firestore
+    )
+
+    @Provides
+    @Singleton
+    fun provideMessageDataSource(firestore: FirebaseFirestore): MessageDataSource = MessageDataSourceImpl(
         firestore
     )
 

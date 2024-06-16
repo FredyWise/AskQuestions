@@ -1,7 +1,9 @@
 package com.fredy.askquestions.features.data.repositoryImpl
 
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
+import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
 import com.fredy.askquestions.features.domain.models.Chat
+import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +15,7 @@ import javax.inject.Inject
 class ChatRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val chatDataSource: ChatDataSource,
+    private val messageDataSource: MessageDataSource
 ): ChatRepository {
     override suspend fun upsertChat(chat: Chat) {
         withContext(Dispatchers.IO) {
@@ -20,9 +23,21 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun upsertMessage(message: Message) {
+        withContext(Dispatchers.IO) {
+            messageDataSource.upsertMessage(message)
+        }
+    }
+
     override suspend fun deleteChat(chat: Chat) {
         withContext(Dispatchers.IO) {
             chatDataSource.deleteChat(chat)
+        }
+    }
+
+    override suspend fun deleteMessage(message: Message) {
+        withContext(Dispatchers.IO) {
+            messageDataSource.deleteMessage(message)
         }
     }
 
@@ -46,5 +61,14 @@ class ChatRepositoryImpl @Inject constructor(
             chatName, currentUser.uid
         )
     }
+
+    override suspend fun searchMessages(messageName: String): Flow<List<Message>> {
+        val currentUser = firebaseAuth.currentUser!!
+        return messageDataSource.searchMessages(
+            messageName, currentUser.uid
+        )
+    }
+
+
 
 }
