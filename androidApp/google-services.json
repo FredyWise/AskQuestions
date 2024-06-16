@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "528731901652",
+    "project_id": "bear-chat-2d441",
+    "storage_bucket": "bear-chat-2d441.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528731901652:android:1881a730e8975ccb2eb541",
+        "android_client_info": {
+          "package_name": "com.fredy.askquestions"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "528731901652-nd3d7hru9g4pjk8nlolajlun51k1ee83.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fredy.askquestions",
+            "certificate_hash": "f3055ddb1a933ef8a6a24af5f9012327c7ec89fb"
+          }
+        },
+        {
+          "client_id": "528731901652-ctno5eh7o5k43lnc7fc2s51ldbhvkp55.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQVmLmV8fvBFyCk9XFdJRbKz_LkYPpMCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528731901652-ctno5eh7o5k43lnc7fc2s51ldbhvkp55.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

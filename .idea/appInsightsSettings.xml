@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.fredy.askquestions" />
+                  <option name="mobileSdkAppId" value="1:528731901652:android:1881a730e8975ccb2eb541" />
+                  <option name="projectId" value="bear-chat-2d441" />
+                  <option name="projectNumber" value="528731901652" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

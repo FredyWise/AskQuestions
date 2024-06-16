@@ -1,7 +1,5 @@
-package com.fredy.askquestions
+package com.fredy.askquestions.features.ui.viewmodels
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,15 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.content
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.URI
+import javax.inject.Inject
 
-class MainViewModel(): ViewModel() {
-    var state by mutableStateOf(MainState())
+@HiltViewModel
+class ChatViewModel @Inject constructor(model: GenerativeModel): ViewModel() {
+    var state by mutableStateOf(ChatState())
         private set
 //
 //    fun onImageSelected(uri: Uri) {
@@ -53,17 +52,19 @@ class MainViewModel(): ViewModel() {
     }
 }
 
-class MainViewModelFactory() : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel() as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
+//class MainViewModelFactory() : ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(
+//                ChatViewModel::class.java)) {
+//            return ChatViewModel() as T
+//        }
+//        throw IllegalArgumentException("Unknown ViewModel class")
+//    }
+//}
 
-data class MainState(
+data class ChatState(
     val isLoading: Boolean = false,
+    val currentUserId: String = "",
     val response: GenerateContentResponse? = null,
     val text: String = "",
     val inputText: String = ""
