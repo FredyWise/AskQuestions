@@ -1,17 +1,17 @@
-package com.fredy.mysavings.Feature.Domain.Repository
+package com.fredy.askquestions.features.domain.repositories
 
-import com.fredy.mysavings.Feature.Domain.Model.UserData
-import com.fredy.mysavings.Feature.Domain.Util.Resource
-
+import com.fredy.askquestions.features.domain.models.User
+import com.fredy.askquestions.features.domain.util.Resource.DataError
+import com.fredy.askquestions.features.domain.util.Resource.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun upsertUser(user: UserData)
-    suspend fun deleteUser(user: UserData)
-    fun getUser(userId: String): Flow<UserData?>
-    suspend fun getCurrentUserFlow(): Flow<Resource<UserData?>>
-    suspend fun getCurrentUser(): UserData?
-    suspend fun getAllUsersOrderedByName(): Flow<List<UserData>>
-    suspend fun searchUsers(usernameEmail: String): Flow<List<UserData>>
+    suspend fun upsertUser(user: User)
+    suspend fun deleteUser(user: User)
+    fun getUser(userId: String): Flow<User?>
+    suspend fun getCurrentUserFlow(): Flow<Resource<User?, DataError.Database>>
+    suspend fun getCurrentUser(): User?
+    suspend fun getAllUsersOrderedByName(): Flow<List<User>>
+    suspend fun searchUsers(usernameEmail: String): Flow<List<User>>
 }
 

@@ -1,4 +1,4 @@
-package com.fredy.mysavings.Feature.Domain.Repository
+package com.fredy.askquestions.features.domain.repositories
 
 import androidx.compose.ui.graphics.Color
 import com.fredy.askquestions.features.data.enums.DisplayMode

@@ -11,7 +11,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.fredy.askquestions.features.data.enums.DisplayMode
 import com.fredy.askquestions.features.domain.util.Preferences
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesState
-import com.fredy.mysavings.Feature.Domain.Repository.PreferencesRepository
+import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow

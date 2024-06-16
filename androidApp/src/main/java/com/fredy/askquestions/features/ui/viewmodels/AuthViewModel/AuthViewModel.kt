@@ -15,7 +15,7 @@ import com.fredy.askquestions.features.domain.usecases.AuthUseCases.AuthUseCases
 import com.fredy.askquestions.features.domain.usecases.UserUseCases.UserUseCases
 import com.fredy.askquestions.features.domain.util.Resource.DataError
 import com.fredy.askquestions.features.domain.util.Resource.Resource
-import com.fredy.mysavings.Feature.Domain.Repository.PreferencesRepository
+import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.storage.storage

@@ -11,6 +11,8 @@ sealed class ApiConfiguration {
 
     object FirebaseModel{
         const val USER_ENTITY = "user"
+        const val CHAT_ENTITY = "chat"
+        const val MESSAGE_ENTITY = "message"
     }
 
     object WebClient{

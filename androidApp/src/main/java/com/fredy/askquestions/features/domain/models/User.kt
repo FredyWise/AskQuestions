@@ -2,7 +2,7 @@ package com.fredy.askquestions.features.domain.models
 
 data class User(
     val uid: String,
-    val fcmToken: String,
+    val fcmToken: String = "",
     val username: String? = null,
     val phone: String? = null,
     val email: String? = null,

@@ -28,11 +28,19 @@ class ChatDataSourceImpl(
     private val firestore: FirebaseFirestore,
 ) : ChatDataSource {
 
-    private val chatCollection = firestore.collection(ApiConfiguration.FirebaseModel.USER_ENTITY)
+    private val chatCollection = firestore.collection(ApiConfiguration.FirebaseModel.CHAT_ENTITY)
 
     override suspend fun upsertChat(chat: Chat) {
         withContext(Dispatchers.IO) {
-            chatCollection.document(chat.chatId).set(chat)
+            val realChat = if (chat.chatId.isEmpty()) {
+                val newChatRef = chatCollection.document()
+                chat.copy(
+                    chatId = newChatRef.id,
+                )
+            } else {
+                chat
+            }
+            chatCollection.document(chat.chatId).set(realChat)
         }
     }
 
@@ -60,7 +68,7 @@ class ChatDataSourceImpl(
         return withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = chatCollection.orderBy(
-                    "chatname", Query.Direction.ASCENDING
+                    "chatName", Query.Direction.ASCENDING
                 ).snapshots()
 
                 querySnapshot.map { it.toObjects<Chat>() }
@@ -74,19 +82,15 @@ class ChatDataSourceImpl(
 
     }
 
-    override suspend fun searchChats(chatName: String,userId:String): Flow<List<Chat>> {
+    override suspend fun searchChats(chatName: String, userId:String): Flow<List<Chat>> {
         return withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = chatCollection.where(
                     Filter.arrayContains(
-                        "chatname", chatName
-                    )
-                ).where(
-                    Filter.arrayContains(
-                        "email", chatName
+                        "chatName", chatName
                     )
                 ).orderBy(
-                    "chatname", Query.Direction.ASCENDING
+                    "chatName", Query.Direction.ASCENDING
                 ).snapshots()
 
                 querySnapshot.map { it.toObjects<Chat>() }

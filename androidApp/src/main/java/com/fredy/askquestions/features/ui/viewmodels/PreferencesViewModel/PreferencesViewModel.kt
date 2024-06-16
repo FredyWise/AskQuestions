@@ -3,7 +3,7 @@ package com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fredy.mysavings.Feature.Domain.Repository.PreferencesRepository
+import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

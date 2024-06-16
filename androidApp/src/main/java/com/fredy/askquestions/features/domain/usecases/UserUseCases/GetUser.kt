@@ -1,7 +1,7 @@
 package com.fredy.askquestions.features.domain.usecases.UserUseCases
 
 import com.fredy.askquestions.features.domain.models.User
-import com.fredy.mysavings.Feature.Domain.Repository.UserRepository
+import com.fredy.askquestions.features.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetUser(
