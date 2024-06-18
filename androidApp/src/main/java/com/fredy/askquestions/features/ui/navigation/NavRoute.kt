@@ -50,7 +50,6 @@ val drawerScreens = listOf(
 val bottomBarScreens = listOf(
     NavigationRoute.Analysis,
     NavigationRoute.Account,
-    NavigationRoute.Categories,
 )
 
 sealed class NavigationRoute(
@@ -107,10 +106,10 @@ sealed class NavigationRoute(
         iconNot = Icons.Outlined.Receipt
     )
 
-    object Categories: NavigationRoute(
-        route = "categories",
-        title = "Categories",
-        contentDescription = "Go to Categories Screen",
+    object Message: NavigationRoute(
+        route = "message",
+        title = "Message",
+        contentDescription = "Go to Message Screen",
         icon = Icons.Default.Label,
         iconNot = Icons.Outlined.Label
     )

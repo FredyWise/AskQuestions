@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetAllChatsOrderedByName(
     private val chatRepository: ChatRepository
 ) {
-    suspend operator fun invoke(): Flow<List<Chat>> {
+    operator fun invoke(): Flow<List<Chat>> {
         return chatRepository.getAllChatsOrderedByName()
     }
 }

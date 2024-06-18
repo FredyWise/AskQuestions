@@ -20,15 +20,19 @@ interface ChatDataSource {
     suspend fun upsertChat(chat: Chat)
     suspend fun deleteChat(chat: Chat)
     suspend fun getChat(chatId: String): Chat?
-    suspend fun getAllChatsOrderedByName(userId:String): Flow<List<Chat>>
-    suspend fun searchChats(chatName: String,userId:String): Flow<List<Chat>>
+    fun getAllChatsOrderedByName(userId: String): Flow<List<Chat>>
+    fun searchChats(
+        chatName: String, userId: String
+    ): Flow<List<Chat>>
 }
 
 class ChatDataSourceImpl(
     private val firestore: FirebaseFirestore,
-) : ChatDataSource {
+): ChatDataSource {
 
-    private val chatCollection = firestore.collection(ApiConfiguration.FirebaseModel.CHAT_ENTITY)
+    private val chatCollection = firestore.collection(
+        ApiConfiguration.FirebaseModel.CHAT_ENTITY
+    )
 
     override suspend fun upsertChat(chat: Chat) {
         withContext(Dispatchers.IO) {
@@ -40,7 +44,9 @@ class ChatDataSourceImpl(
             } else {
                 chat
             }
-            chatCollection.document(chat.chatId).set(realChat)
+            chatCollection.document(chat.chatId).set(
+                realChat
+            )
         }
     }
 
@@ -64,43 +70,44 @@ class ChatDataSourceImpl(
 
     }
 
-    override suspend fun getAllChatsOrderedByName(userId:String): Flow<List<Chat>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val querySnapshot = chatCollection.orderBy(
-                    "chatName", Query.Direction.ASCENDING
-                ).snapshots()
+    override fun getAllChatsOrderedByName(
+        userId: String
+    ): Flow<List<Chat>> {
+        return try {
+            val querySnapshot = chatCollection.orderBy(
+                "chatName",
+                Query.Direction.ASCENDING
+            ).snapshots()
 
-                querySnapshot.map { it.toObjects<Chat>() }
-            } catch (e: Exception) {
-                Timber.e(
-                    "Failed to get all chat: ${e.message}"
-                )
-                throw e
-            }
+            querySnapshot.map { it.toObjects<Chat>() }
+        } catch (e: Exception) {
+            Timber.e(
+                "Failed to get all chat: ${e.message}"
+            )
+            throw e
         }
-
     }
 
-    override suspend fun searchChats(chatName: String, userId:String): Flow<List<Chat>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val querySnapshot = chatCollection.where(
-                    Filter.arrayContains(
-                        "chatName", chatName
-                    )
-                ).orderBy(
-                    "chatName", Query.Direction.ASCENDING
-                ).snapshots()
-
-                querySnapshot.map { it.toObjects<Chat>() }
-            } catch (e: Exception) {
-                Timber.e(
-                    "Failed to get all chat: ${e.message}"
+    override fun searchChats(
+        chatName: String, userId: String
+    ): Flow<List<Chat>> {
+        return try {
+            val querySnapshot = chatCollection.where(
+                Filter.arrayContains(
+                    "chatName", chatName
                 )
-                throw e
-            }
+            ).orderBy(
+                "chatName",
+                Query.Direction.ASCENDING
+            ).snapshots()
 
+            querySnapshot.map { it.toObjects<Chat>() }
+        } catch (e: Exception) {
+            Timber.e(
+                "Failed to get all chat: ${e.message}"
+            )
+            throw e
         }
+
     }
 }

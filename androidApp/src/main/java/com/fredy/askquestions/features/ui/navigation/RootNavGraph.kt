@@ -17,7 +17,6 @@ import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun RootNavGraph(
     navController: NavHostController,
@@ -36,17 +35,13 @@ fun RootNavGraph(
         authenticationNavGraph(
             preferencesViewModel,
             authViewModel,
-            rootNavController = navController
+            navController
         )
-        navigation(
-            route = Graph.MainNav,
-            startDestination = Graph.HomeNav,
-        ) {
-            composable(Graph.HomeNav){
-
-            }
-
-        }
+        mainNavGraph(
+            preferencesViewModel,
+            authViewModel,
+            navController
+        )
 
     }
 }

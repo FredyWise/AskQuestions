@@ -26,6 +26,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -76,17 +77,7 @@ fun SignIn(
     onEvent: (AuthEvent) -> Unit
 ) {
     val context = LocalContext.current
-    var switchState by rememberSaveable {
-        mutableStateOf(
-            false
-        )
-    }
-    var emailOrPhone by rememberSaveable {
-        mutableStateOf(
-            ""
-        )
-    }
-    var password by rememberSaveable {
+    var phoneNumber by rememberSaveable {
         mutableStateOf(
             ""
         )
@@ -96,7 +87,6 @@ fun SignIn(
             ""
         )
     }
-
     val sheetState = rememberModalBottomSheetState()
     var isSheetOpen by rememberSaveable {
         mutableStateOf(false)
@@ -137,12 +127,12 @@ fun SignIn(
         ) {
             OTPScreen(
                 isLoading = state.authResource is Resource.Loading && state.authType == AuthMethod.PhoneOTP,
-                phoneNumber = emailOrPhone,
+                phoneNumber = phoneNumber,
                 onResendOtp = {
                     onEvent(
                         AuthEvent.SendOtp(
                             context,
-                            emailOrPhone,
+                            phoneNumber,
                             onCodeSent = {
                                 isSheetOpen = true
                             },
@@ -184,27 +174,12 @@ fun SignIn(
         )
         Spacer(modifier = Modifier.height(16.dp))
         CustomTextField(
-            label = if (switchState) "Email" else "Phone Number",
-            value = emailOrPhone,
-            onValueChange = { emailOrPhone = it },
-            placeholder = if (switchState) "type your email..." else "type your phone number...",
-            keyboardType = if (switchState) KeyboardType.Email else KeyboardType.Phone
+            label = "Phone Number",
+            value = phoneNumber,
+            onValueChange = { phoneNumber = it },
+            placeholder = "type your phone number...",
+            keyboardType = KeyboardType.Phone
         )
-        AnimatedVisibility(
-            visible = switchState,
-            enter = fadeIn() + expandVertically(
-                animationSpec = tween(300)
-            )
-        ) {
-            CustomTextField(
-                label = "Password",
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "typePassword...",
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardType = KeyboardType.Password
-            )
-        }
         Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -213,12 +188,12 @@ fun SignIn(
             Button(
                 onClick = {
                     if (isValidPhoneNumber(
-                            emailOrPhone
+                            phoneNumber
                         )) {
                         onEvent(
                             AuthEvent.SendOtp(
                                 context,
-                                emailOrPhone,
+                                phoneNumber,
                                 onCodeSent = {
                                     isSheetOpen = true
                                 },
@@ -245,7 +220,7 @@ fun SignIn(
                     )
                 } else {
                     Text(
-                        text = if (switchState) "Sign In" else "Get OTP",
+                        text = "Get OTP",
                         style = MaterialTheme.typography.titleMedium,
                         color = onButtonColor,
                         modifier = Modifier.padding(
@@ -286,17 +261,7 @@ fun SignIn(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Sign In with ${if (switchState) "Phone Number" else "Email"} instead? ",
-            modifier = Modifier.clickable {
-                switchState = !switchState
-            },
-            fontWeight = FontWeight.Bold,
-            color = onBackgroundColor,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
+        HorizontalDivider(
             color = MaterialTheme.colorScheme.onBackground.copy(
                 alpha = 0.08f
             )

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class SearchChats(
     private val chatRepository: ChatRepository
 ) {
-    suspend operator fun invoke(chatName: String): Flow<List<Chat>> {
+    operator fun invoke(chatName: String): Flow<List<Chat>> {
         return chatRepository.searchChats(
             chatName
         )

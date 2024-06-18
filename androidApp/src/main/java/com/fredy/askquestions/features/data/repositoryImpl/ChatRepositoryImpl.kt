@@ -50,25 +50,26 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllChatsOrderedByName(): Flow<List<Chat>> {
+    override fun getAllChatsOrderedByName(): Flow<List<Chat>> {
         val currentUser = firebaseAuth.currentUser!!
         return chatDataSource.getAllChatsOrderedByName(currentUser.uid)
     }
 
-    override suspend fun searchChats(chatName: String): Flow<List<Chat>> {
+    override fun getAllMessagesInTheSameChat(chatId: String): Flow<List<Message>> {
+        return messageDataSource.getMessagesFromChat(chatId)
+    }
+
+    override fun searchChats(chatName: String): Flow<List<Chat>> {
         val currentUser = firebaseAuth.currentUser!!
         return chatDataSource.searchChats(
             chatName, currentUser.uid
         )
     }
 
-    override suspend fun searchMessages(messageName: String): Flow<List<Message>> {
+    override fun searchMessages(messageName: String): Flow<List<Message>> {
         val currentUser = firebaseAuth.currentUser!!
         return messageDataSource.searchMessages(
             messageName, currentUser.uid
         )
     }
-
-
-
 }

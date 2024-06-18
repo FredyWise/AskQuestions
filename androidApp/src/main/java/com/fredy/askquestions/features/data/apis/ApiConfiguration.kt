@@ -19,4 +19,8 @@ sealed class ApiConfiguration {
         const val ID = BuildConfig.WEB_CLIENT_ID
     }
 
+    object AppData{
+        const val AppVersion = BuildConfig.VERSION_NAME
+    }
+
 }
