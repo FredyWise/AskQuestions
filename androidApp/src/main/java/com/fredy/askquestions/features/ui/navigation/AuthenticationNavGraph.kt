@@ -1,9 +1,6 @@
 package com.fredy.askquestions.features.ui.navigation
 
 import android.widget.Toast
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -13,11 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.fredy.askquestions.features.domain.util.Resource.Resource
-import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
+import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
 import com.fredy.mysavings.Feature.Presentation.Screens.Authentication.SignIn
-import com.fredy.mysavings.Feature.Presentation.Screens.Authentication.SignUp
 
 fun NavGraphBuilder.authenticationNavGraph(
     preferencesViewModel: PreferencesViewModel,
@@ -39,7 +35,7 @@ fun NavGraphBuilder.authenticationNavGraph(
             ) {
                 when (state.bioAuthResource) {
                     is Resource.Error -> {
-                        val error =" state.bioAuthResource.error.name"
+                        val error = " state.bioAuthResource.error.name"
                         Toast.makeText(
                             context,
                             "${error}",
@@ -54,7 +50,8 @@ fun NavGraphBuilder.authenticationNavGraph(
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.onEvent(
-                            AuthEvent.GetCurrentUser)
+                            AuthEvent.GetCurrentUser
+                        )
                         rootNavController.navigate(
                             Graph.MainNav
                         )
@@ -87,7 +84,8 @@ fun NavGraphBuilder.authenticationNavGraph(
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.onEvent(
-                            AuthEvent.GetCurrentUser)
+                            AuthEvent.GetCurrentUser
+                        )
                         rootNavController.navigate(
                             Graph.MainNav
                         )
@@ -102,53 +100,9 @@ fun NavGraphBuilder.authenticationNavGraph(
                 navController = rootNavController,
                 state = state,
                 isUsingBioAuth = setting.bioAuth,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
             )
         }
-        composable(
-            route = NavigationRoute.SignUp.route,
-        ) {
-            val state by viewModel.state.collectAsStateWithLifecycle()
-            val context = LocalContext.current
 
-            LaunchedEffect(
-                key1 = state.authResource,
-            ) {
-                when (state.authResource) {
-                    is Resource.Error -> {
-                        viewModel.onEvent(
-                            AuthEvent.SignOut
-                        )
-                        val error = "state.authResource.message"
-                        Toast.makeText(
-                            context,
-                            "${error}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-
-                    is Resource.Success -> {
-                        Toast.makeText(
-                            context,
-                            "SignUp Success",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        viewModel.onEvent(
-                            AuthEvent.GetCurrentUser)
-                        rootNavController.navigate(
-                            Graph.MainNav
-                        )
-                    }
-
-                    else -> {
-                    }
-                }
-            }
-            SignUp(
-                navController = rootNavController,
-                state = state,
-                onEvent = viewModel::onEvent
-            )
-        }
     }
 }

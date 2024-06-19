@@ -41,7 +41,7 @@ class MessageDataSourceImpl(
             } else {
                 message
             }
-            messageCollection.document(message.messageId).set(
+            messageCollection.document(realMessage.messageId).set(
                 realMessage
             )
         }
@@ -57,16 +57,17 @@ class MessageDataSourceImpl(
         chatId: String
     ): Flow<List<Message>> {
         return try {
-            val querySnapshot = messageCollection.where(
-                Filter.arrayContains(
-                    "chatId", chatId
-                )
+            val querySnapshot = messageCollection.whereEqualTo(
+                "chatId",
+                chatId
             ).orderBy(
                 "timestamp",
                 Query.Direction.ASCENDING
             ).snapshots()
 
-            querySnapshot.map { it.toObjects<Message>() }
+            querySnapshot.map {
+                it.toObjects<Message>()
+            }
         } catch (e: Exception) {
             Timber.e(
                 "Failed to get all message: ${e.message}"

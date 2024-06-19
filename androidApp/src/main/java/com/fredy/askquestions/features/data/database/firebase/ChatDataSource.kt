@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface ChatDataSource {
-    suspend fun upsertChat(chat: Chat)
+    suspend fun upsertChat(chat: Chat): String
     suspend fun deleteChat(chat: Chat)
     suspend fun getChat(chatId: String): Chat?
     fun getAllChatsOrderedByName(userId: String): Flow<List<Chat>>
@@ -34,8 +34,8 @@ class ChatDataSourceImpl(
         ApiConfiguration.FirebaseModel.CHAT_ENTITY
     )
 
-    override suspend fun upsertChat(chat: Chat) {
-        withContext(Dispatchers.IO) {
+    override suspend fun upsertChat(chat: Chat): String {
+        return withContext(Dispatchers.IO) {
             val realChat = if (chat.chatId.isEmpty()) {
                 val newChatRef = chatCollection.document()
                 chat.copy(
@@ -44,10 +44,16 @@ class ChatDataSourceImpl(
             } else {
                 chat
             }
-            chatCollection.document(chat.chatId).set(
+            chatCollection.document(realChat.chatId).set(
                 realChat
-            )
+            ).addOnFailureListener {
+                Timber.e(
+                    "Failed to upsert chat: ${it.message}"
+                )
+            }
+            realChat.chatId
         }
+
     }
 
     override suspend fun deleteChat(chat: Chat) {

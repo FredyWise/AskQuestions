@@ -3,11 +3,6 @@ package com.fredy.mysavings.Feature.Presentation.Screens.Authentication
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +19,6 @@ import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -43,17 +37,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.fredy.askquestions.R
 import com.fredy.askquestions.features.data.apis.ApiConfiguration
 import com.fredy.askquestions.features.data.enums.AuthMethod
 import com.fredy.askquestions.features.domain.util.Resource.Resource
-import com.fredy.askquestions.features.ui.navigation.NavigationRoute
 import com.fredy.askquestions.features.ui.screens.authentication.CustomTextField
 import com.fredy.askquestions.features.ui.screens.authentication.GoogleButton
-import com.fredy.askquestions.features.ui.util.isValidLogin
 import com.fredy.askquestions.features.ui.util.isValidPhoneNumber
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthState
@@ -74,7 +64,7 @@ fun SignIn(
     onBackgroundColor: Color = MaterialTheme.colorScheme.onBackground,
     isUsingBioAuth: Boolean = false,
     state: AuthState,
-    onEvent: (AuthEvent) -> Unit
+    onEvent: (AuthEvent) -> Unit,
 ) {
     val context = LocalContext.current
     var phoneNumber by rememberSaveable {
@@ -277,7 +267,13 @@ fun SignIn(
             loadingText = "Signing In ...",
             isLoading = state.authResource is Resource.Loading && state.authType == AuthMethod.Google
         ) {
-            if (state.signedInUser == null) {
+            if (isUsingBioAuth && state.signedInUser != null) {
+                Toast.makeText(
+                    context,
+                    "You have a session please use biometrics to sign in",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
                 val gso = GoogleSignInOptions.Builder(
                     GoogleSignInOptions.DEFAULT_SIGN_IN
                 ).requestEmail().requestIdToken(
@@ -288,25 +284,8 @@ fun SignIn(
                     context, gso
                 )
                 launcher.launch(googleSignInClient.signInIntent)
-            } else {
-                Toast.makeText(
-                    context,
-                    "You have a session please use biometrics to sign in",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "New User? Sign Up ",
-            modifier = Modifier.clickable {
-                navController.navigate(
-                    NavigationRoute.SignUp.route
-                )
-            },
-            fontWeight = FontWeight.Bold,
-            color = onBackgroundColor,
-        )
+        }
     }
 }

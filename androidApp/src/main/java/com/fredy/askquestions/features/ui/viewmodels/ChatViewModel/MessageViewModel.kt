@@ -1,32 +1,72 @@
 package com.fredy.askquestions.features.ui.viewmodels.ChatViewModel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fredy.askquestions.features.domain.models.Chat
 import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
+import com.fredy.askquestions.features.domain.usecases.ChatUseCases.ChatUseCases
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.GenerateContentResponse
-import com.google.ai.client.generativeai.type.content
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MessageViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
-    private val model: GenerativeModel
+    private val chatUseCases: ChatUseCases,
+    private val model: GenerativeModel,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    var state by mutableStateOf(ChatState())
-        private set
+
+    private val _state = MutableStateFlow(
+        MessageState()
+    )
 
     init {
-        onEvent(MessageEvent.LoadMessages)
+        viewModelScope.launch {
+            savedStateHandle.get<String>("chatId")?.let { chatId ->
+                chatRepository.getChat(chatId).collect {
+                    it?.let { chat ->
+                        _state.update {
+                            it.copy(
+                                currentChat = chat
+                            )
+                        }
+                    }
+                }
+                onEvent(MessageEvent.LoadMessages)
+            }
+        }
     }
+
+    private val _messageList = chatUseCases.getAllMessagesInChat(
+        _state.value.currentChat.chatId
+    ).stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        emptyList()
+    )
+
+    val state = combine(_state,_messageList){ state, messageList ->
+        state.copy(
+            messages = messageList
+        )
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        _state.value
+    )
+
 
     fun onEvent(event: MessageEvent) {
         when (event) {
@@ -34,117 +74,107 @@ class MessageViewModel @Inject constructor(
                 event.text
             )
 
-            MessageEvent.OnSendClick -> handleSendClick()
-            MessageEvent.LoadMessages -> handleLoadMessages()
-            MessageEvent.SuggestContent -> handleSuggestContent()
+            MessageEvent.OnSendClick -> {
+                if (_state.value.inputText.isBlank() || _state.value.isLoading) return
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    val newMessage = Message(
+                        text = _state.value.inputText,
+                    )
+
+                    try {
+                        val chatId = chatUseCases.upsertMessage(
+                            _state.value.currentChat,
+                            newMessage
+                        )
+                        _state.update {
+                            it.copy(
+                                currentChat = it.currentChat.copy(
+                                    chatId = chatId
+                                ),
+                                messages = it.messages + newMessage,
+                                inputText = ""
+                            )
+                        }
+                    } catch (e: Exception) {
+                        // Handle error (e.g., logging, showing a toast, etc.)
+                    }
+                }
+            }
+//            MessageEvent.SuggestContent -> handleSuggestContent()
+            MessageEvent.SuggestContent -> {}
+            MessageEvent.LoadMessages -> {
+//                viewModelScope.launch {
+//                    chatUseCases.getAllMessagesInChat(
+//                        _state.value.currentChat.chatId
+//                    ).collect { messages ->
+//                        _messageList.update { messages }
+//                    }
+//                }
+            }
         }
     }
 
     private fun handleTextChange(text: String) {
-        state = state.copy(inputText = text)
+        _state.update { it.copy(inputText = text) }
     }
 
-    private fun handleSendClick() {
-        if (state.inputText.isBlank() || state.isLoading) return
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val newMessage = Message(
-                text = state.inputText,
-            )
-
-            try {
-                chatRepository.upsertMessage(
-                    newMessage
-                ) // Save the message to the repository
-                state = state.copy(
-                    messages = state.messages + newMessage, // Add the new message to the list
-                    inputText = "" // Clear the input field
-                )
-            } catch (e: Exception) {
-                // Handle error (e.g., logging, showing a toast, etc.)
-            }
-        }
-    }
-
-    private fun handleLoadMessages() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                chatRepository.getAllMessagesInTheSameChat(
-                    state.currentChat.chatId
-                ).collect { messages ->
-                    state = state.copy(messages = messages)
-                }
-            } catch (e: Exception) {
-                // Handle error (e.g., logging, showing a toast, etc.)
-            }
-        }
-    }
-
-    private fun handleSuggestContent() {
-        if (state.inputText.isBlank() || state.isLoading) return
-
-        viewModelScope.launch(Dispatchers.IO) {
-            state = state.copy(isLoading = true)
-            try {
-                val response = model.generateContent(
-                    content {
-                        text(state.inputText)
-                    })
-
-                // Handle generated response and update messages
-                val suggestedMessage = Message(
-                    text = response.text ?: "Something went wrong",
-                )
-
-                chatRepository.upsertMessage(
-                    suggestedMessage
-                ) // Save the suggested message
-
-                state = state.copy(
-                    response = response,
-                    text = suggestedMessage.text,
-                    isLoading = false,
-                    messages = state.messages + suggestedMessage // Add the suggested message to the list
-                )
-            } catch (e: Exception) {
-                // Handle error (e.g., logging, showing a toast, etc.)
-                state = state.copy(isLoading = false)
-            }
-        }
-    }
-
-    fun onSuggestClick() {
-        if (state.inputText == "" || state.isLoading) return
-
-        viewModelScope.launch(Dispatchers.IO) {
-            state = state.copy(isLoading = true)
-            val response = model.generateContent(
-                content {
-                    text(state.inputText)
-                })
-
-            state = state.copy(
-                response = response,
-                text = response.text ?: "Something went wrong",
-                isLoading = false
-            )
-        }
-
-    }
+//    private fun handleSuggestContent() {
+//        if (state.inputText.isBlank() || state.isLoading) return
+//
+//        viewModelScope.launch(Dispatchers.IO) {
+//            state = state.copy(isLoading = true)
+//            try {
+//                val response = model.generateContent(
+//                    content {
+//                        text(state.inputText)
+//                    })
+//
+//                // Handle generated response and update messages
+//                val suggestedMessage = Message(
+//                    text = response.text ?: "Something went wrong",
+//                )
+//
+//                chatRepository.upsertMessage(
+//                    suggestedMessage
+//                ) // Save the suggested message
+//
+//                state = state.copy(
+//                    response = response,
+//                    text = suggestedMessage.text,
+//                    isLoading = false,
+//                    messages = state.messages + suggestedMessage // Add the suggested message to the list
+//                )
+//            } catch (e: Exception) {
+//                // Handle error (e.g., logging, showing a toast, etc.)
+//                state = state.copy(isLoading = false)
+//            }
+//        }
+//    }
+//
+//    fun onSuggestClick() {
+//        if (state.inputText == "" || state.isLoading) return
+//
+//        viewModelScope.launch(Dispatchers.IO) {
+//            state = state.copy(isLoading = true)
+//            val response = model.generateContent(
+//                content {
+//                    text(state.inputText)
+//                })
+//
+//            state = state.copy(
+//                response = response,
+//                text = response.text ?: "Something went wrong",
+//                isLoading = false
+//            )
+//        }
+//
+//    }
 }
 
-//class MainViewModelFactory() : ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(
-//                ChatViewModel::class.java)) {
-//            return ChatViewModel() as T
-//        }
-//        throw IllegalArgumentException("Unknown ViewModel class")
-//    }
-//}
 
-
-data class ChatState(
+data class MessageState(
     val currentChat: Chat = Chat(),
     val isLoading: Boolean = false,
     val currentUserId: String = "",

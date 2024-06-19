@@ -10,7 +10,9 @@ import com.fredy.askquestions.features.domain.usecases.AuthUseCases.UpdateUserIn
 import com.fredy.askquestions.features.domain.usecases.AuthUseCases.VerifyPhoneNumber
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.ChatUseCases
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.DeleteChat
+import com.fredy.askquestions.features.domain.usecases.ChatUseCases.DeleteMessage
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.GetAllChatsOrderedByName
+import com.fredy.askquestions.features.domain.usecases.ChatUseCases.GetAllMessagesInChat
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.GetChat
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.SearchChats
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.UpsertChat
@@ -82,7 +84,13 @@ object UseCasesModule {
         getAllChatsOrderedByName = GetAllChatsOrderedByName(
             chatRepository
         ),
-        searchChats = SearchChats(chatRepository)
+        searchChats = SearchChats(chatRepository),
+        getAllMessagesInChat = GetAllMessagesInChat(
+            chatRepository
+        ),
+        deleteMessage = DeleteMessage(
+            chatRepository
+        )
     )
 
 }

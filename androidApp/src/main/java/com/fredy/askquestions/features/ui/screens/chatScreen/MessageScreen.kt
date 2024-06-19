@@ -26,23 +26,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatState
 import com.fredy.askquestions.features.domain.models.Message
+import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageEvent
+import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageState
+import timber.log.Timber
 
 @Composable
 fun MessageScreen(
     modifier: Modifier = Modifier,
-    state: ChatState,
-    onTextChange: (String) -> Unit,
-    onClick: () -> Unit,
-    messages: List<Message>
+    state: MessageState,
+    onEvent: (MessageEvent) -> Unit,
 ) {
+    Timber.e("MessageScreen ${state.messages}")
+    val onSend: () -> Unit = {
+        if (state.inputText.isNotBlank()) {
+            onEvent(MessageEvent.OnSendClick)
+        }
+    }
     Column(modifier = modifier.fillMaxSize()) {
         // Messages display area
         LazyColumn(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.fillMaxWidth().weight(1f)
         ) {
-            items(messages) { message ->
+            items(state.messages) { message ->
                 MessageBubble(
                     text = message.text,
                     isUser = message.senderId == state.currentUserId
@@ -58,27 +64,39 @@ fun MessageScreen(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(
+            modifier = Modifier
+                .padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
-                ).fillMaxWidth()
+                )
+                .fillMaxWidth()
         ) {
             // Input field
-            OutlinedTextField(value = state.inputText,
-                onValueChange = { onTextChange(it) },
+            OutlinedTextField(
+                value = state.inputText,
+                onValueChange = {
+                    onEvent(
+                        MessageEvent.OnTextChange(
+                            it
+                        )
+                    )
+                },
                 label = { Text("Type your message") },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Send
                 ),
                 keyboardActions = KeyboardActions(
                     onSend = {
-                        if (state.inputText.isNotBlank()) {
-                            onClick()
-                        }
-                    }),
-                modifier = Modifier.weight(1f).padding(
+                        onSend()
+
+                    },
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(
                         end = 8.dp
-                    ))
+                    )
+            )
 
             // Send button with animation
             AnimatedVisibility(
@@ -96,11 +114,8 @@ fun MessageScreen(
             ) {
                 IconButton(
                     onClick = {
-                        if (state.inputText.isNotBlank()) {
-                            onClick()
-                        }
-                    },
-                    modifier = Modifier.align(
+                        onSend()
+                    }, modifier = Modifier.align(
                         Alignment.CenterVertically
                     )
                 ) {

@@ -1,27 +1,15 @@
 package com.fredy.askquestions.features.domain.usecases.ChatUseCases
 
-import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.domain.models.Message
-import com.fredy.askquestions.features.domain.repositories.ChatRepository
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-
 
 data class ChatUseCases(
-    val upsertChat: UpsertChat,
+    val upsertChat: UpsertChat,// useless
     val upsertMessage: UpsertMessage,
     val deleteChat: DeleteChat,
+    val deleteMessage: DeleteMessage,
     val getChat: GetChat,
     val getAllChatsOrderedByName: GetAllChatsOrderedByName,
+    val getAllMessagesInChat: GetAllMessagesInChat,
+//    val searchMessages: SearchMessages,
     val searchChats: SearchChats
 )
 
-class UpsertMessage(
-    private val chatRepository: ChatRepository
-) {
-    suspend operator fun invoke(message: Message) {
-        val chat = chatRepository.getChat(message.chatId).firstOrNull()!!
-        chatRepository.upsertChat(chat.copy(lastMessage = message))
-        chatRepository.upsertMessage(message)
-    }
-}
