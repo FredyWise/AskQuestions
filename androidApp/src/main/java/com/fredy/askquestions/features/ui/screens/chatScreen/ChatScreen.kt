@@ -1,11 +1,13 @@
 package com.fredy.askquestions.features.ui.screens.chatScreen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +25,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -39,45 +45,63 @@ import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatViewModel
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
+    contentColor: Color = MaterialTheme.colorScheme.primary,
+    containerColor: Color = MaterialTheme.colorScheme.secondary,
     viewModel: ChatViewModel,
     navigateToMessageScreen: (String?) -> Unit,
 ) {
     val chatList by viewModel.chatList.collectAsStateWithLifecycle()
-
+    var isFabVisible by remember {
+        mutableStateOf(
+            true
+        )
+    }
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navigateToMessageScreen(null) },
-                contentColor = Color.White,
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(
-                    Icons.Default.ChatBubble,
-                    contentDescription = "Add Chat"
-                )
+            AnimatedVisibility(visible = isFabVisible) {
+                FloatingActionButton(
+                    modifier = Modifier.border(
+                        1.dp, contentColor.copy(
+                            0.3f
+                        ), CircleShape
+                    ),
+                    contentColor = contentColor,
+                    containerColor = containerColor,
+                    onClick = {
+                        navigateToMessageScreen(
+                            null
+                        )
+                    },
+                ) {
+                    Icon(
+                        Icons.Default.ChatBubble,
+                        contentDescription = "Add Chat",
+                        tint = contentColor,
+                    )
+                }
             }
-        }) { innerPadding ->
+        },
+    ) { innerPadding ->
         Column(
             modifier = Modifier.padding(
                 innerPadding
             )
         ) {
-            // Search bar (optional)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Chats",
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
             if (chatList.isEmpty()) {
-                Text(
-                    text = "No chats found",
-                    modifier = Modifier.fillMaxSize()
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No chats found",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             } else {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
                     items(chatList) { chat ->
                         ChatListItem(
                             chat = chat,

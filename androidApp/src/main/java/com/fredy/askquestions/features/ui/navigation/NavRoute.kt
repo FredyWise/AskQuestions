@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.LineAxis
 import androidx.compose.material.icons.filled.Login
 import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.Search
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.LineAxis
 import androidx.compose.material.icons.outlined.Login
 import androidx.compose.material.icons.outlined.Password
+import androidx.compose.material.icons.outlined.People
 import androidx.compose.material.icons.outlined.PieChart
 import androidx.compose.material.icons.outlined.Receipt
 import androidx.compose.material.icons.outlined.Search
@@ -38,7 +40,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 object Graph {
     const val RootNav = "root_nav"
     const val AuthNav = "auth_nav"
-    const val HomeNav = "home_nav"
+    const val BottomBarNav = "bottom_bar_nav"
     const val MainNav = "main_nav"
 }
 
@@ -48,8 +50,8 @@ val drawerScreens = listOf(
 )
 
 val bottomBarScreens = listOf(
-    NavigationRoute.Analysis,
-    NavigationRoute.Account,
+    NavigationRoute.Chat,
+    NavigationRoute.Contacts,
 )
 
 sealed class NavigationRoute(
@@ -68,13 +70,13 @@ sealed class NavigationRoute(
         iconNot = Icons.Outlined.Login
     )
 
-    object SignUp: NavigationRoute(
-        route = "signUp",
-        title = "Sign Up",
-        contentDescription = "Go Sign Up",
-        icon = Icons.Default.HowToReg,
-        iconNot = Icons.Outlined.HowToReg
-    )
+//    object SignUp: NavigationRoute(
+//        route = "signUp",
+//        title = "Sign Up",
+//        contentDescription = "Go Sign Up",
+//        icon = Icons.Default.HowToReg,
+//        iconNot = Icons.Outlined.HowToReg
+//    )
 
 
     //top bar
@@ -106,6 +108,15 @@ sealed class NavigationRoute(
         iconNot = Icons.Outlined.Receipt
     )
 
+    object Contacts: NavigationRoute(
+        route = "contacts",
+        title = "Contacts",
+        contentDescription = "Go to Contacts Screen",
+        icon = Icons.Default.People,
+        iconNot = Icons.Outlined.People
+    )
+
+    //other screen
     object Message: NavigationRoute(
         route = "message",
         title = "Message",
@@ -113,48 +124,6 @@ sealed class NavigationRoute(
         icon = Icons.Default.Label,
         iconNot = Icons.Outlined.Label
     )
-
-    object Account: NavigationRoute(
-        route = "wallet",
-        title = "Wallet",
-        contentDescription = "Go to Wallet Screen",
-        icon = Icons.Default.AccountBalanceWallet,
-        iconNot = Icons.Outlined.AccountBalanceWallet
-    )
-
-    // Analysis
-    object Analysis: NavigationRoute(
-        route = "analytics",
-        title = "Analytics",
-        contentDescription = "Go to Analytics Screen",
-        icon = Icons.Default.PieChart,
-        iconNot = Icons.Outlined.PieChart
-    )
-    object AnalysisOverview: NavigationRoute(
-        route = "analytics Overview",
-        title = "Overview",
-        contentDescription = "Go to Overview Screen",
-        icon = Icons.Default.DataSaverOff,
-        iconNot = Icons.Outlined.DataSaverOff
-    )
-
-    object AnalysisFlow: NavigationRoute(
-        route = "analytics Flow",
-        title = "Flow",
-        contentDescription = "Go to Flow Screen",
-        icon = Icons.Default.LineAxis,
-        iconNot = Icons.Outlined.LineAxis
-    )
-
-    object AnalysisWallet: NavigationRoute(
-        route = "analytics Wallet",
-        title = "Wallet",
-        contentDescription = "Go to Wallet Screen",
-        icon = Icons.Default.BarChart,
-        iconNot = Icons.Outlined.BarChart
-    )
-
-    //other screen
     object Search: NavigationRoute(
         route = "search",
         title = "Search",
@@ -162,19 +131,6 @@ sealed class NavigationRoute(
         icon = Icons.Default.Search,
         iconNot = Icons.Outlined.Search
     )
-    object Add: NavigationRoute(
-        route = "add",
-        title = "Add",
-        contentDescription = "Go to Add Screen",
-        icon = Icons.Default.AddBox,
-        iconNot = Icons.Outlined.AddBox
-    )
-    object BulkAdd: NavigationRoute(
-        route = "addBulk",
-        title = "AddBulk",
-        contentDescription = "Go to Bulk Add Screen",
-        icon = Icons.Default.AddToPhotos,
-        iconNot = Icons.Outlined.AddToPhotos
-    )
+
 }
 //Icons.Default.CenterFocusStrong

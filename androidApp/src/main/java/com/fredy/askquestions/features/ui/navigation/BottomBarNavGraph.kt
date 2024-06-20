@@ -1,11 +1,14 @@
 package com.fredy.askquestions.features.ui.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
@@ -19,48 +22,41 @@ import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageEvent
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
 
-fun NavGraphBuilder.mainNavGraph(
-    preferencesViewModel: PreferencesViewModel,
-    authViewModel: AuthViewModel,
-    rootNavController: NavHostController
+@Composable
+fun BottomBarNavGraph(
+    rootNavController: NavHostController,
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
-    navigation(
-        route = Graph.MainNav,
-        startDestination = Graph.BottomBarNav,
+    NavHost(
+        navController = navController,
+        startDestination = NavigationRoute.Chat.route,
+        modifier = modifier,
     ) {
         composable(
-            route = Graph.BottomBarNav,
+            route = NavigationRoute.Chat.route,
         ) {
-            val state by authViewModel.state.collectAsStateWithLifecycle()
-            MainScreen(
-                rootNavController = rootNavController,
-                currentUser = state.signedInUser,
-                signOut = {
-                    authViewModel.onEvent(
-                        AuthEvent.SignOut
+            val viewModel: ChatViewModel = hiltViewModel()
+
+            ChatScreen(
+                viewModel = viewModel,
+                navigateToMessageScreen = {
+                    rootNavController.navigateSingleTopTo(
+                        "${NavigationRoute.Message.route}?chatId=$it"
                     )
-                }
+                },
             )
         }
 
         composable(
-            route = "${NavigationRoute.Message.route}?chatId={chatId}",
-            arguments = listOf(
-                navArgument(
-                    name = "chatId"
-                ) {
-                    type = NavType.StringType
-                    defaultValue = null
-                    nullable = true
-                },
-            )
+            route = NavigationRoute.Contacts.route,
         ) {
-            val viewModel: MessageViewModel = hiltViewModel()
-            val state by viewModel.state.collectAsStateWithLifecycle()
-            MessageScreen(
-                state = state,
-                onEvent = viewModel::onEvent,
-            )
+//            val viewModel: ContactsViewModel = hiltViewModel()
+//            val state by viewModel.state.collectAsStateWithLifecycle()
+//            ContactScreen(
+//                state = state,
+//                onEvent = viewModel::onEvent,
+//            )
         }
 
     }

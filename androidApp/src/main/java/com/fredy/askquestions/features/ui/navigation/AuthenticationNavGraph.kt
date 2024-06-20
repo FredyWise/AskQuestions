@@ -52,7 +52,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                         viewModel.onEvent(
                             AuthEvent.GetCurrentUser
                         )
-                        rootNavController.navigate(
+                        rootNavController.navigateSingleTopTo(
                             Graph.MainNav
                         )
                     }
@@ -86,7 +86,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                         viewModel.onEvent(
                             AuthEvent.GetCurrentUser
                         )
-                        rootNavController.navigate(
+                        rootNavController.navigateSingleTopTo(
                             Graph.MainNav
                         )
                     }

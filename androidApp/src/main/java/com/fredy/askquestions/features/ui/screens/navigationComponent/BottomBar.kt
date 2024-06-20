@@ -37,85 +37,14 @@ fun BottomBar(
     onTabSelected: (NavigationRoute) -> Unit,
     currentScreen: NavigationRoute
 ) {
-    var selectedIndex by remember {
-        mutableIntStateOf(0)
-    }
-    AnimatedNavigationBar(
-        modifier = modifier
-            .selectableGroup()
-            .fillMaxWidth(),
-        selectedIndex = selectedIndex,
-        barColor = backgroundColor,
-        ballColor = contentColor
-    ) {
-        allScreens.forEachIndexed { index, screen ->
-            BottomBarItem(
-                modifier = Modifier.padding(
-                    vertical = 8.dp
-                ),
-                onClick = {
-                    selectedIndex = index
-                    onTabSelected(screen)
-                },
-                selected = currentScreen == screen,
-                selectedIcon = screen.icon,
-                unselectedIcon = screen.iconNot,
-                description = screen.contentDescription,
-                selectedColor = contentColor,
-                unselectedColor = contentColor.copy(
-                    alpha = ContentAlpha.disabled
-                ),
-                label = screen.title
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomBarItem(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    description: String,
-    selected: Boolean,
-    selectedIcon: ImageVector,
-    unselectedIcon: ImageVector,
-    selectedColor: Color,
-    unselectedColor: Color,
-    label: String,
-    animationDuration: Int = 600,
-) {
-    val color by animateColorAsState(
-        targetValue = if (selected) selectedColor else unselectedColor,
-        animationSpec = TweenSpec(durationMillis = animationDuration),
-        label = "",
+    AnimatedPointBottomBarTemplate(
+        modifier = modifier,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        allScreens = allScreens,
+        onTabSelected = onTabSelected,
+        currentScreen = currentScreen
     )
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Crossfade(
-                targetState = if (selected) selectedIcon else unselectedIcon,
-                animationSpec = TweenSpec(
-                    durationMillis = animationDuration
-                ),
-                label = ""
-            ) { icon ->
-                Icon(
-                    imageVector = icon,
-                    contentDescription = description,
-                    tint = color,
-                )
-            }
-            Text(
-                text = label, color = color
-            )
-        }
-    }
 }
 
 

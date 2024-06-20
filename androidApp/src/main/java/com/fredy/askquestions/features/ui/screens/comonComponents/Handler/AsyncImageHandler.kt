@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.ui.screens.comonComponents
+package com.fredy.askquestions.features.ui.screens.comonComponents.Handler
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
