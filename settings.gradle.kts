@@ -21,5 +21,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Ask Questions"
-include(":androidApp")
+include(":app")
  
