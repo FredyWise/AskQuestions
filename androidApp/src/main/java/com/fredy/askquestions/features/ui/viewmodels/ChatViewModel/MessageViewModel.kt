@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fredy.askquestions.features.domain.models.Chat
 import com.fredy.askquestions.features.domain.models.Message
-import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.ChatUseCases
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.GenerateContentResponse
@@ -13,30 +12,32 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MessageViewModel @Inject constructor(
-    private val chatRepository: ChatRepository,
     private val chatUseCases: ChatUseCases,
     private val model: GenerativeModel,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-
     private val _state = MutableStateFlow(
         MessageState()
     )
 
+    private val _chatId = MutableStateFlow("")
+
     init {
         viewModelScope.launch {
             savedStateHandle.get<String>("chatId")?.let { chatId ->
-                chatRepository.getChat(chatId).collect {
-                    it?.let { chat ->
+                _chatId.update { chatId }
+                chatUseCases.getChat(chatId).collect { chat ->
+                    chat?.let { chat ->
                         _state.update {
                             it.copy(
                                 currentChat = chat
@@ -49,15 +50,20 @@ class MessageViewModel @Inject constructor(
         }
     }
 
-    private val _messageList = chatUseCases.getAllMessagesInChat(
-        _state.value.currentChat.chatId
-    ).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        emptyList()
-    )
+    private val _messageList = _chatId.flatMapLatest {
+        chatUseCases.getAllMessagesInChat(it).stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(),
+            emptyList()
+        )
+    }
 
-    val state = combine(_state,_messageList){ state, messageList ->
+    val state = combine(
+        _state,
+        _messageList
+    ) { state, messageList ->
+        Timber.e("state: $state")
+        Timber.e("messageList: $messageList")
         state.copy(
             messages = messageList
         )

@@ -21,7 +21,9 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun upsertChat(chat: Chat): String {
         return withContext(Dispatchers.IO) {
             val currentUser = firebaseAuth.currentUser!!
-            var tempChat = chat.copy(lastMessageSender = currentUser.uid)
+            var tempChat = chat.copy(
+                lastMessageSender = currentUser.uid
+            )
             Timber.d("ChatRepositoryImpl.upsertChat: $tempChat")
             if (!tempChat.participants.contains(
                     currentUser.uid
@@ -39,7 +41,9 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun upsertMessage(message: Message) {
         withContext(Dispatchers.IO) {
             val currentUser = firebaseAuth.currentUser!!
-            val tempMessage = message.copy(senderId = currentUser.uid)
+            val tempMessage = message.copy(
+                senderId = currentUser.uid
+            )
             Timber.d("ChatRepositoryImpl.upsertMessage: $tempMessage")
             messageDataSource.upsertMessage(
                 tempMessage

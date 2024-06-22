@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.fredy.askquestions.features.domain.util.Resource.Resource
+import com.fredy.askquestions.features.ui.util.navigateZeroTopTo
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
@@ -52,7 +53,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                         viewModel.onEvent(
                             AuthEvent.GetCurrentUser
                         )
-                        rootNavController.navigateSingleTopTo(
+                        rootNavController.navigateZeroTopTo(
                             Graph.MainNav
                         )
                     }
@@ -86,7 +87,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                         viewModel.onEvent(
                             AuthEvent.GetCurrentUser
                         )
-                        rootNavController.navigateSingleTopTo(
+                        rootNavController.navigateZeroTopTo(
                             Graph.MainNav
                         )
                     }

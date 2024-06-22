@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,6 +23,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,48 +47,15 @@ import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatViewModel
 @Composable
 fun ChatScreen(
     modifier: Modifier = Modifier,
-    contentColor: Color = MaterialTheme.colorScheme.primary,
-    containerColor: Color = MaterialTheme.colorScheme.secondary,
     viewModel: ChatViewModel,
     navigateToMessageScreen: (String?) -> Unit,
 ) {
     val chatList by viewModel.chatList.collectAsStateWithLifecycle()
-    var isFabVisible by remember {
-        mutableStateOf(
-            true
-        )
-    }
-    Scaffold(
+    Surface(
         modifier = modifier,
-        floatingActionButton = {
-            AnimatedVisibility(visible = isFabVisible) {
-                FloatingActionButton(
-                    modifier = Modifier.border(
-                        1.dp, contentColor.copy(
-                            0.3f
-                        ), CircleShape
-                    ),
-                    contentColor = contentColor,
-                    containerColor = containerColor,
-                    onClick = {
-                        navigateToMessageScreen(
-                            null
-                        )
-                    },
-                ) {
-                    Icon(
-                        Icons.Default.ChatBubble,
-                        contentDescription = "Add Chat",
-                        tint = contentColor,
-                    )
-                }
-            }
-        },
-    ) { innerPadding ->
+    ) {
         Column(
-            modifier = Modifier.padding(
-                innerPadding
-            )
+            modifier = Modifier
         ) {
             if (chatList.isEmpty()) {
                 Box(
@@ -103,6 +72,11 @@ fun ChatScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     items(chatList) { chat ->
+                        Spacer(
+                            modifier = Modifier.height(
+                                8.dp
+                            )
+                        )
                         ChatListItem(
                             chat = chat,
                             onClick = {

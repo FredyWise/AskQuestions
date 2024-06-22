@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -27,6 +28,8 @@ fun AppBar(
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     onProfilePictureClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onMoreClick: () -> Unit,
     currentUser: User?,
 ) {
     AppBarTemplate(
@@ -66,19 +69,15 @@ fun AppBar(
             }
         },
         actions = {
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = onSearchClick) {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Show Search Bar"
                 )
             }
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = onMoreClick) {
                 Icon(
-                    imageVector = Icons.Default.Search,
+                    imageVector = Icons.Default.MoreVert,
                     contentDescription = "Show Search Bar"
                 )
             }

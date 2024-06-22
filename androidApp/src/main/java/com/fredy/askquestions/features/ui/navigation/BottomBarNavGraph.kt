@@ -41,7 +41,7 @@ fun BottomBarNavGraph(
             ChatScreen(
                 viewModel = viewModel,
                 navigateToMessageScreen = {
-                    rootNavController.navigateSingleTopTo(
+                    rootNavController.navigate(
                         "${NavigationRoute.Message.route}?chatId=$it"
                     )
                 },

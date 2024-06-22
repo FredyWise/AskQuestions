@@ -35,6 +35,11 @@ fun NavGraphBuilder.mainNavGraph(
             MainScreen(
                 rootNavController = rootNavController,
                 currentUser = state.signedInUser,
+                navigateToMessageScreen = {
+                    rootNavController.navigate(
+                        "${NavigationRoute.Message.route}?chatId=$it"
+                    )
+                },
                 signOut = {
                     authViewModel.onEvent(
                         AuthEvent.SignOut
