@@ -4,14 +4,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -22,11 +23,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageEvent
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageState
 import timber.log.Timber
@@ -43,22 +44,37 @@ fun MessageScreen(
             onEvent(MessageEvent.OnSendClick)
         }
     }
-    Column(modifier = modifier.fillMaxSize()) {
+    val lazyListState = rememberLazyListState()
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         // Messages display area
+
+        LaunchedEffect(state.messages) {
+            if (state.messages.isNotEmpty()) lazyListState.animateScrollToItem(
+                state.messages.lastIndex
+            )
+        }
         LazyColumn(
-            modifier = Modifier.fillMaxWidth().weight(1f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(
+                    1f
+                ),
+            state = lazyListState,
         ) {
-            items(state.messages) { message ->
+            items(
+                state.messages,
+                key = { it.message.messageId }) { messageMap ->
                 MessageBubble(
-                    text = message.text,
-                    isUser = message.senderId == state.currentUserId
+                    text = messageMap.message.text,
+                    isUser = messageMap.isUser
                 )
             }
+
         }
-
-        // Spacer to push input area to the bottom
-        Spacer(modifier = Modifier.weight(1f))
-
         // Input field and send button with animation
         val visibleState = state.inputText.isNotBlank()
 

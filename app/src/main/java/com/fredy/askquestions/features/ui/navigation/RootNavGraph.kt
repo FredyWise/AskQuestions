@@ -13,12 +13,13 @@ import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.Prefer
 @Composable
 fun RootNavGraph(
     navController: NavHostController,
+    modifier: Modifier = Modifier,
     startDestination: String,
     preferencesViewModel: PreferencesViewModel,
     authViewModel: AuthViewModel,
 ) {
     NavHost(
-        modifier = Modifier.background(
+        modifier = modifier.background(
             MaterialTheme.colorScheme.background
         ),
         navController = navController,

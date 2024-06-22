@@ -41,9 +41,9 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun upsertMessage(message: Message) {
         withContext(Dispatchers.IO) {
             val currentUser = firebaseAuth.currentUser!!
-            val tempMessage = message.copy(
+            val tempMessage = if (message.senderId.isEmpty()) message.copy(
                 senderId = currentUser.uid
-            )
+            ) else message
             Timber.d("ChatRepositoryImpl.upsertMessage: $tempMessage")
             messageDataSource.upsertMessage(
                 tempMessage

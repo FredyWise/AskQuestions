@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -47,29 +48,45 @@ fun AskQuestionsTheme(
     state: PreferencesState,
     content: @Composable () -> Unit
 ) {
+
     val context = LocalContext.current
-    val colorScheme = when(state.displayMode) {
-        DisplayMode.Light -> LightColorScheme
-        DisplayMode.Dark -> DarkColorScheme
-        DisplayMode.System -> {
-            if(dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    val colorScheme = if (dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        when (state.displayMode) {
+            DisplayMode.Light -> dynamicLightColorScheme(
+                context
+            )
+            DisplayMode.Dark -> dynamicDarkColorScheme(
+                context
+            )
+            DisplayMode.System -> {
                 if (darkTheme) dynamicDarkColorScheme(
                     context
-                ) else dynamicLightColorScheme(context)
-            } else {
+                ) else dynamicLightColorScheme(
+                    context
+                )
+            }
+        }
+    } else {
+        when (state.displayMode) {
+            DisplayMode.Light -> LightColorScheme
+            DisplayMode.Dark -> DarkColorScheme
+            DisplayMode.System -> {
+
                 if (darkTheme) DarkColorScheme else LightColorScheme
             }
         }
     }
+
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.surface.toArgb()
+            window.navigationBarColor = Color.Unspecified.toArgb()
             WindowCompat.getInsetsController(
-                window,
-                view
-            ).isAppearanceLightStatusBars = when(state.displayMode) {
+                window, view
+            ).isAppearanceLightStatusBars = when (state.displayMode) {
                 DisplayMode.Light -> true
                 DisplayMode.Dark -> false
                 DisplayMode.System -> !darkTheme
@@ -79,6 +96,7 @@ fun AskQuestionsTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        shapes = shapes,
         content = content
     )
 }

@@ -23,7 +23,7 @@ class MainActivity: ComponentActivity() {
     private val viewModel by viewModels<PreferencesViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             val authViewModel: AuthViewModel = hiltViewModel()
             val setting by viewModel.state.collectAsStateWithLifecycle()
@@ -39,10 +39,10 @@ class MainActivity: ComponentActivity() {
                     val navController = rememberNavController()
                     val startDestination = if (state.signedInUser != null && setting.autoLogin && !setting.bioAuth) Graph.MainNav else Graph.AuthNav
                     RootNavGraph(
-                        navController,
-                        startDestination,
-                        viewModel,
-                        authViewModel
+                        navController = navController,
+                        startDestination = startDestination,
+                        preferencesViewModel = viewModel,
+                        authViewModel = authViewModel
                     )
                 }
 

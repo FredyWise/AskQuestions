@@ -73,7 +73,8 @@ object UseCasesModule {
     @Provides
     @Singleton
     fun provideChatUseCases(
-        chatRepository: ChatRepository
+        chatRepository: ChatRepository,
+        userRepository: UserRepository
     ): ChatUseCases = ChatUseCases(
         upsertChat = UpsertChat(chatRepository),
         upsertMessage = UpsertMessage(
@@ -86,7 +87,7 @@ object UseCasesModule {
         ),
         searchChats = SearchChats(chatRepository),
         getAllMessagesInChat = GetAllMessagesInChat(
-            chatRepository
+            chatRepository,userRepository
         ),
         deleteMessage = DeleteMessage(
             chatRepository
