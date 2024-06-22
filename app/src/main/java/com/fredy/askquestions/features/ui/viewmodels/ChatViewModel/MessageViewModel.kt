@@ -97,7 +97,7 @@ class MessageViewModel @Inject constructor(
 
                     if (inputText.first() == '/') {
                         handleSendMessages(
-                            handleSuggestContent()
+                            handleSuggestContent(inputText.removePrefix("/"))
                         )
                     }
 
@@ -108,11 +108,11 @@ class MessageViewModel @Inject constructor(
     }
 
 
-    private suspend fun handleSuggestContent(): Message {
+    private suspend fun handleSuggestContent(inputText: String): Message {
         val suggestedMessage = try {
             val response = model.generateContent(
                 content {
-                    text(_state.value.inputText)
+                    text(inputText)
                 })
 
             Message(

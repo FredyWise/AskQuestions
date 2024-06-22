@@ -70,7 +70,7 @@ fun MessageScreen(
                 key = { it.message.messageId }) { messageMap ->
                 MessageBubble(
                     text = messageMap.message.text,
-                    isUser = messageMap.isUser
+                    isRight = messageMap.isUser
                 )
             }
 

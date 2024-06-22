@@ -15,36 +15,56 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MessageBubble(text: String, isUser: Boolean) {
-    val backgroundColor = if (isUser) {
-        MaterialTheme.colorScheme.primary
+fun MessageBubble(
+    modifier: Modifier = Modifier,
+    rightColor: Color = MaterialTheme.colorScheme.primary,
+    leftColor: Color = MaterialTheme.colorScheme.secondary,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
+    text: String,
+    isRight: Boolean
+) {
+    val backgroundColor = if (isRight) {
+        rightColor
     } else {
-        Color.LightGray
+        leftColor
     }
 
-    val contentAlignment = if (isUser) {
+    val contentAlignment = if (isRight) {
         Alignment.TopEnd
     } else {
         Alignment.TopStart
     }
 
     Box(
-        modifier = Modifier.padding(vertical = 4.dp).padding(
+        modifier = modifier
+            .padding(vertical = 4.dp)
+            .padding(
                 horizontal = 16.dp
-            ).fillMaxWidth(),
+            )
+            .then(
+                if (isRight) {
+                    Modifier.padding(start = 8.dp)
+                } else {
+                    Modifier.padding(end = 8.dp)
+                }
+            )
+            .fillMaxWidth(),
         contentAlignment = contentAlignment
     ) {
         Box(
-            modifier = Modifier.background(
+            modifier = Modifier
+                .background(
                     color = backgroundColor,
                     shape = RoundedCornerShape(8.dp)
-                ).padding(8.dp).clip(
+                )
+                .padding(8.dp)
+                .clip(
                     RoundedCornerShape(8.dp)
                 )
         ) {
             Text(
                 text = text,
-                color = if (isUser) Color.White else Color.Black,
+                color = textColor,
                 modifier = Modifier.padding(8.dp)
             )
         }
