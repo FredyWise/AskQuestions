@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -20,6 +21,7 @@ fun MessageBubble(
     rightColor: Color = MaterialTheme.colorScheme.primary,
     leftColor: Color = MaterialTheme.colorScheme.secondary,
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
+    bubbleEndPadding: Dp = 16.dp,
     text: String,
     isRight: Boolean
 ) {
@@ -43,9 +45,9 @@ fun MessageBubble(
             )
             .then(
                 if (isRight) {
-                    Modifier.padding(start = 8.dp)
+                    Modifier.padding(start = bubbleEndPadding)
                 } else {
-                    Modifier.padding(end = 8.dp)
+                    Modifier.padding(end = bubbleEndPadding)
                 }
             )
             .fillMaxWidth(),
