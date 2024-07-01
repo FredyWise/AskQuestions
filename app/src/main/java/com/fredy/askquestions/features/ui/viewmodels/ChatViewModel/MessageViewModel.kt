@@ -3,9 +3,10 @@ package com.fredy.askquestions.features.ui.viewmodels.ChatViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.fredy.askquestions.features.domain.models.Chat
+import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.domain.models.Message
-import com.fredy.askquestions.features.domain.models.MessageMap
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.ChatUseCases
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.GenerateContentResponse
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -32,6 +34,7 @@ class MessageViewModel @Inject constructor(
     private val _state = MutableStateFlow(
         MessageState()
     )
+    val state = _state.asStateFlow()
 
     private val _chatId = MutableStateFlow("")
 
@@ -56,21 +59,10 @@ class MessageViewModel @Inject constructor(
         chatUseCases.getAllMessagesInChat(it).stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
-            emptyList()
+            PagingData.empty()
         )
     }
-
-    val state = combine(
-        _state, _messageList
-    ) { state, messageList ->
-        state.copy(
-            messages = messageList
-        )
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        _state.value
-    )
+    val message = _messageList
 
 
     fun onEvent(event: MessageEvent) {
@@ -90,17 +82,16 @@ class MessageViewModel @Inject constructor(
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    val newMessage = Message(
+                    val newMessageCollection = MessageCollection(
                         text = inputText,
                     )
-                    handleSendMessages(newMessage)
+                    handleSendMessages(newMessageCollection)
 
                     if (inputText.first() == '/') {
                         handleSendMessages(
                             handleSuggestContent(inputText.removePrefix("/"))
                         )
                     }
-
                 }
             }
 
@@ -108,14 +99,14 @@ class MessageViewModel @Inject constructor(
     }
 
 
-    private suspend fun handleSuggestContent(inputText: String): Message {
-        val suggestedMessage = try {
+    private suspend fun handleSuggestContent(inputText: String): MessageCollection {
+        val suggestedMessageCollection = try {
             val response = model.generateContent(
                 content {
                     text(inputText)
                 })
 
-            Message(
+            MessageCollection(
                 senderId = "Model",
                 text = response.text ?: "Something went wrong",
             )
@@ -126,22 +117,22 @@ class MessageViewModel @Inject constructor(
                 )
             }
 
-            Message(
+            MessageCollection(
                 senderId = "Model",
                 text = "Something went wrong",
             )
         }
 
-        return suggestedMessage
+        return suggestedMessageCollection
     }
 
     private suspend fun handleSendMessages(
-        newMessage: Message
+        newMessageCollection: MessageCollection
     ) {
         try {
             val chatId = chatUseCases.upsertMessage(
                 _state.value.currentChat,
-                newMessage
+                newMessageCollection
             )
             _state.update {
                 it.copy(
@@ -168,5 +159,5 @@ data class MessageState(
     val response: GenerateContentResponse? = null,
     val text: String = "",
     val inputText: String = "",
-    val messages: List<MessageMap> = emptyList() // List to hold chat messages
+//    val messages: List<Message> = emptyList() // List to hold chat messages
 )

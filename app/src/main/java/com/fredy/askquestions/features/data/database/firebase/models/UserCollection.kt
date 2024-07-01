@@ -1,6 +1,11 @@
-package com.fredy.askquestions.features.domain.models
+package com.fredy.askquestions.features.data.database.firebase.models
 
-data class User(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class UserCollection(
+    @PrimaryKey
     val uid: String = "",
     val username: String? = null,
     val phone: String? = null,

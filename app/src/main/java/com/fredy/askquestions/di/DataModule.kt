@@ -1,15 +1,22 @@
 package com.fredy.askquestions.di
 
+import android.content.Context
+import androidx.room.Room
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSourceImpl
 import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
 import com.fredy.askquestions.features.data.database.firebase.MessageDataSourceImpl
 import com.fredy.askquestions.features.data.database.firebase.UserDataSource
 import com.fredy.askquestions.features.data.database.firebase.UserDataSourceImpl
+import com.fredy.askquestions.features.data.database.room.ChattingDatabase
+import com.fredy.askquestions.features.data.database.room.dao.ChatDao
+import com.fredy.askquestions.features.data.database.room.dao.MessageDao
+import com.fredy.askquestions.features.data.database.room.dao.UserDao
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -17,47 +24,29 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataModule {
 
-//    @Provides
-//    @Singleton
-//    fun savingsDatabase(@ApplicationContext appContext: Context): SavingsDatabase {
-//        return Room.databaseBuilder(
-//            appContext,
-//            SavingsDatabase::class.java,
-//            "savings_database"
-//        ).build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideRecordDao(savingsDatabase: SavingsDatabase): RecordDao = savingsDatabase.recordDao
-//
-//    @Provides
-//    @Singleton
-//    fun provideAccountDao(savingsDatabase: SavingsDatabase): WalletDao = savingsDatabase.walletDao
-//
-//    @Provides
-//    @Singleton
-//    fun provideCategoryDao(savingsDatabase: SavingsDatabase): CategoryDao =
-//        savingsDatabase.categoryDao
-//
-//    @Provides
-//    @Singleton
-//    fun provideBookDao(savingsDatabase: SavingsDatabase): BookDao =
-//        savingsDatabase.bookDao
-//
-//    @Provides
-//    @Singleton
-//    fun provideUserDao(savingsDatabase: SavingsDatabase): UserDao = savingsDatabase.userDao
-//
-//    @Provides
-//    @Singleton
-//    fun provideCurrencyCacheDao(savingsDatabase: SavingsDatabase): CurrencyCacheDao =
-//        savingsDatabase.currencyCache
-//
-//    @Provides
-//    @Singleton
-//    fun provideCurrencyDao(savingsDatabase: SavingsDatabase): CurrencyDao =
-//        savingsDatabase.currency
+    @Provides
+    @Singleton
+    fun savingsDatabase(@ApplicationContext appContext: Context): ChattingDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            ChattingDatabase::class.java,
+            "chatting_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(savingsDatabase: ChattingDatabase): UserDao = savingsDatabase.userDao
+
+    @Provides
+    @Singleton
+    fun provideChatDao(savingsDatabase: ChattingDatabase): ChatDao =
+        savingsDatabase.chatDao
+
+    @Provides
+    @Singleton
+    fun provideMessageDao(savingsDatabase: ChattingDatabase): MessageDao =
+        savingsDatabase.messageDao
 
     @Provides
     @Singleton

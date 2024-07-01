@@ -2,9 +2,11 @@ package com.fredy.askquestions.features.data.repositoryImpl
 
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
+import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.domain.models.Chat
 import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -38,12 +40,14 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun upsertMessage(message: Message) {
+    override suspend fun upsertMessage(
+        messageCollection: MessageCollection
+    ) {
         withContext(Dispatchers.IO) {
             val currentUser = firebaseAuth.currentUser!!
-            val tempMessage = if (message.senderId.isEmpty()) message.copy(
+            val tempMessage = if (messageCollection.senderId.isEmpty()) messageCollection.copy(
                 senderId = currentUser.uid
-            ) else message
+            ) else messageCollection
             Timber.d("ChatRepositoryImpl.upsertMessage: $tempMessage")
             messageDataSource.upsertMessage(
                 tempMessage
@@ -57,10 +61,12 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteMessage(message: Message) {
+    override suspend fun deleteMessage(
+        messageCollection: MessageCollection
+    ) {
         withContext(Dispatchers.IO) {
             messageDataSource.deleteMessage(
-                message
+                messageCollection
             )
         }
     }
@@ -82,10 +88,13 @@ class ChatRepositoryImpl @Inject constructor(
     }
 
     override fun getAllMessagesInTheSameChat(
-        chatId: String
-    ): Flow<List<Message>> {
-        return messageDataSource.getMessagesFromChat(
-            chatId
+        chatId: String,
+        lastMessageTime: Timestamp?
+    ): Flow<List<MessageCollection>> {
+        Timber.d("ChatRepositoryImpl.getAllMessagesInTheSameChat.start: $chatId")
+        return messageDataSource.getPagerMessagesFromChat(
+            chatId = chatId,
+            lastMessageTime = lastMessageTime,
         )
     }
 
@@ -96,7 +105,7 @@ class ChatRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun searchMessages(messageName: String): Flow<List<Message>> {
+    override fun searchMessages(messageName: String): Flow<List<MessageCollection>> {
         val currentUser = firebaseAuth.currentUser!!
         return messageDataSource.searchMessages(
             messageName, currentUser.uid

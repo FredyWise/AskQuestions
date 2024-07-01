@@ -1,19 +1,18 @@
 package com.fredy.askquestions.features.domain.usecases.ChatUseCases
 
 import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.domain.models.Message
+import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
-import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 
 class UpsertMessage(
     private val chatRepository: ChatRepository
 ) {
-    suspend operator fun invoke(chat: Chat, message: Message) : String{
-        val chatId = chatRepository.upsertChat(chat.updateLastMessage(message))
-        Timber.d("Upsert message: $message")
+    suspend operator fun invoke(chat: Chat, messageCollection: MessageCollection) : String{
+        val chatId = chatRepository.upsertChat(chat.updateLastMessage(messageCollection))
+        Timber.d("Upsert message: $messageCollection")
         chatRepository.upsertMessage(
-            message.copy(chatId = chatId)
+            messageCollection.copy(chatId = chatId)
         )
         return chatId
     }

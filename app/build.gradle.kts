@@ -103,8 +103,8 @@ dependencies {
     // DataStore Preferences
     implementation(libs.androidx.datastore.preferences)
 
+    // Google
     // Firebase
-    implementation(libs.play.services.auth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.firestore.ktx)
@@ -113,9 +113,22 @@ dependencies {
     //
     implementation(libs.google.firebase.messaging.ktx)
 
-//    // Stream IO
-//    implementation(libs.stream.chat.android.compose)
-//    implementation(libs.stream.chat.android.offline)
+    // Google apis
+    implementation(libs.play.services.auth)
+    implementation("com.google.api-client:google-api-client-android:1.26.0") {
+        exclude(group = "org.apache.httpcomponents")
+//        exclude(module = "guava-jdk5")
+    }
+    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0") {
+        exclude(group = "org.apache.httpcomponents")
+//        exclude(module = "guava-jdk5")
+    }
+
+
+    // Room database
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.paging)
 
     // Retrofit networking
     implementation(libs.retrofit)

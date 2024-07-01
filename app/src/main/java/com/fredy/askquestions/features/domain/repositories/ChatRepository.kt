@@ -1,7 +1,8 @@
 package com.fredy.askquestions.features.domain.repositories
 
+import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.domain.models.Message
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
@@ -11,10 +12,13 @@ interface ChatRepository {
     fun getAllChatsOrderedByName(): Flow<List<Chat>>
     fun searchChats(chatName: String): Flow<List<Chat>>
 
-    suspend fun upsertMessage(message: Message)
-    suspend fun deleteMessage(message: Message)
-    fun searchMessages(messageName: String): Flow<List<Message>>
-    fun getAllMessagesInTheSameChat(chatId: String): Flow<List<Message>>
+    suspend fun upsertMessage(messageCollection: MessageCollection)
+    suspend fun deleteMessage(messageCollection: MessageCollection)
+    fun searchMessages(messageName: String): Flow<List<MessageCollection>>
+    fun getAllMessagesInTheSameChat(
+        chatId: String,
+        lastMessageTime: Timestamp? = null
+    ): Flow<List<MessageCollection>>
 
 }
 

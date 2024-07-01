@@ -80,7 +80,9 @@ class ChatDataSourceImpl(
         userId: String
     ): Flow<List<Chat>> {
         return try {
-            val querySnapshot = chatCollection.orderBy(
+            val querySnapshot = chatCollection.whereArrayContains(
+                "participants", userId
+            ).orderBy(
                 "chatName",
                 Query.Direction.ASCENDING
             ).snapshots()
@@ -98,7 +100,10 @@ class ChatDataSourceImpl(
         chatName: String, userId: String
     ): Flow<List<Chat>> {
         return try {
-            val querySnapshot = chatCollection.where(
+            val querySnapshot = chatCollection.whereArrayContains(
+                "participants",
+                userId
+            ).where(
                 Filter.arrayContains(
                     "chatName", chatName
                 )
