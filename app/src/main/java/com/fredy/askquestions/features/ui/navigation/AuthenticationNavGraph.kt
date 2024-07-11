@@ -98,7 +98,6 @@ fun NavGraphBuilder.authenticationNavGraph(
             }
 
             SignIn(
-                navController = rootNavController,
                 state = state,
                 isUsingBioAuth = setting.bioAuth,
                 onEvent = viewModel::onEvent,

@@ -8,5 +8,5 @@ data class Message (val messageId: String = "",
     val text: String = "",
     val mediaUrls: List<String> = emptyList(),
     val timestamp: Timestamp = Timestamp.now(),
-    val isUser:Boolean,
+    val isUser:Boolean = true,
 )

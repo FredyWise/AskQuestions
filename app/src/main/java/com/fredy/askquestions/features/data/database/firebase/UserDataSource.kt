@@ -1,7 +1,7 @@
 package com.fredy.askquestions.features.data.database.firebase
 
 
-import com.fredy.askquestions.features.data.apis.ApiConfiguration
+import com.fredy.askquestions.features.data.Util.Configuration
 import com.fredy.askquestions.features.domain.models.User
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,7 +28,8 @@ class UserDataSourceImpl(
     private val firestore: FirebaseFirestore,
 ) : UserDataSource {
 
-    private val userCollection = firestore.collection(ApiConfiguration.FirebaseModel.USER_ENTITY)
+    private val userCollection = firestore.collection(
+        Configuration.FirebaseModel.USER_ENTITY)
 
     override suspend fun upsertUser(user: User) {
         withContext(Dispatchers.IO) {

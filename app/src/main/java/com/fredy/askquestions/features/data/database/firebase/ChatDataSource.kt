@@ -1,7 +1,7 @@
 package com.fredy.askquestions.features.data.database.firebase
 
 
-import com.fredy.askquestions.features.data.apis.ApiConfiguration
+import com.fredy.askquestions.features.data.Util.Configuration
 import com.fredy.askquestions.features.domain.models.Chat
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +31,7 @@ class ChatDataSourceImpl(
 ): ChatDataSource {
 
     private val chatCollection = firestore.collection(
-        ApiConfiguration.FirebaseModel.CHAT_ENTITY
+        Configuration.FirebaseModel.CHAT_ENTITY
     )
 
     override suspend fun upsertChat(chat: Chat): String {

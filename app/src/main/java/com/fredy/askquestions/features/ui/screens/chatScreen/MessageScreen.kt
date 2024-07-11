@@ -1,85 +1,66 @@
 package com.fredy.askquestions.features.ui.screens.chatScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageEvent
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageState
-import timber.log.Timber
+import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.UIState
 
 @Composable
 fun MessageScreen(
     modifier: Modifier = Modifier,
-    state: MessageState,
+    state: UIState,
     messages: LazyPagingItems<Message>,
     onEvent: (MessageEvent) -> Unit,
 ) {
 
-    val lazyListState = rememberLazyListState()
+    val context = LocalContext.current
+    LaunchedEffect(key1 = messages.loadState) {
+        if (messages.loadState.refresh is LoadState.Error) {
+            Toast.makeText(
+                context,
+                "Error: " + (messages.loadState.refresh as LoadState.Error).error.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        // Messages display area
-
-        LaunchedEffect(messages) {
-            if (messages.itemCount > 0) lazyListState.animateScrollToItem(
-                messages.itemCount-1
-            )
-        }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(
+        if (messages.loadState.refresh is LoadState.Loading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(
+                        1f
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            MessageBody(
+                modifier = Modifier.weight(
                     1f
                 ),
-            state = lazyListState,
-            reverseLayout = true,
-        ) {
-            items(
-                messages.itemCount,
-                key = { it },
-            ) {
-                messages[it]?.let {
-                    MessageBubble(
-                        text = it.text,
-                        isRight = it.isUser
-                    )
-                }
-            }
+                messages,
+            )
         }
-
-//        LaunchedEffect(state.messages) {
-//            if (state.messages.isNotEmpty()) lazyListState.animateScrollToItem(
-//                state.messages.lastIndex
-//            )
-//        }
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .weight(
-//                    1f
-//                ),
-//            state = lazyListState,
-//        ) {
-//            items(state.messages,
-//                key = { it.messageId }) { messageMap ->
-//                MessageBubble(
-//                    text = messageMap.text,
-//                    isRight = messageMap.isUser
-//                )
-//            }
-//        }
-
 
         // Input field and send button with animation
         val visibleState = state.inputText.isNotBlank()
@@ -91,4 +72,5 @@ fun MessageScreen(
         )
     }
 }
+
 

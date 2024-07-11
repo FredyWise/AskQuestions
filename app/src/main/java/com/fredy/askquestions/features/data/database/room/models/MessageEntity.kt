@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 @Entity
 data class MessageEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val primaryKey: Int = 0,
     val messageId: String = "",
     val senderId: String = "",
     val chatId: String = "",

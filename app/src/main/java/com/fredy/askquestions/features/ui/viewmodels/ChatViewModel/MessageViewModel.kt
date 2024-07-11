@@ -4,12 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.insertHeaderItem
+
 import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.usecases.ChatUseCases.ChatUseCases
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.content
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,14 +34,16 @@ class MessageViewModel @Inject constructor(
     private val _state = MutableStateFlow(
         MessageState()
     )
-    val state = _state.asStateFlow()
+    private val _uiState = MutableStateFlow(
+        UIState()
+    )
 
-    private val _chatId = MutableStateFlow("")
+    val uiState = _uiState.asStateFlow()
+
 
     init {
         viewModelScope.launch {
             savedStateHandle.get<String>("chatId")?.let { chatId ->
-                _chatId.update { chatId }
                 chatUseCases.getChat(chatId).collect { chat ->
                     chat?.let { chat ->
                         _state.update {
@@ -55,41 +57,53 @@ class MessageViewModel @Inject constructor(
         }
     }
 
-    private val _messageList = _chatId.flatMapLatest {
-        chatUseCases.getAllMessagesInChat(it).stateIn(
+
+    private val _messageList = _state.flatMapLatest {
+        chatUseCases.getAllMessagesInChat(it.currentChat.chatId).stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
             PagingData.empty()
         )
     }
+
     val message = _messageList
 
 
     fun onEvent(event: MessageEvent) {
         when (event) {
             is MessageEvent.OnTextChange -> {
-                _state.update { it.copy(inputText = event.text) }
+                _uiState.update {
+                    it.copy(
+                        inputText = event.text
+                    )
+                }
             }
 
             MessageEvent.OnSendClick -> {
-                val inputText=_state.value.inputText
-                if (inputText.isBlank() || _state.value.isLoading) return
+                val inputText = _uiState.value.inputText
+                if (inputText.isBlank() || _uiState.value.isLoading) return
 
-                _state.update {
+                _uiState.update {
                     it.copy(
                         isLoading = true
                     )
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    val newMessageCollection = MessageCollection(
+                    val newMessage = Message(
                         text = inputText,
                     )
-                    handleSendMessages(newMessageCollection)
+                    handleSendMessages(
+                        newMessage
+                    )
 
                     if (inputText.first() == '/') {
                         handleSendMessages(
-                            handleSuggestContent(inputText.removePrefix("/"))
+                            handleSuggestContent(
+                                inputText.removePrefix(
+                                    "/"
+                                )
+                            )
                         )
                     }
                 }
@@ -99,50 +113,58 @@ class MessageViewModel @Inject constructor(
     }
 
 
-    private suspend fun handleSuggestContent(inputText: String): MessageCollection {
-        val suggestedMessageCollection = try {
+    private suspend fun handleSuggestContent(
+        inputText: String
+    ): Message {
+        val suggestedMessage = try {
             val response = model.generateContent(
                 content {
                     text(inputText)
                 })
 
-            MessageCollection(
+            Message(
                 senderId = "Model",
                 text = response.text ?: "Something went wrong",
             )
         } catch (e: Exception) {
-            _state.update {
+            _uiState.update {
                 it.copy(
                     isLoading = false
                 )
             }
 
-            MessageCollection(
+            Message(
                 senderId = "Model",
                 text = "Something went wrong",
             )
         }
 
-        return suggestedMessageCollection
+        return suggestedMessage
     }
 
     private suspend fun handleSendMessages(
-        newMessageCollection: MessageCollection
+        newMessage: Message
     ) {
         try {
             val chatId = chatUseCases.upsertMessage(
                 _state.value.currentChat,
-                newMessageCollection
+                newMessage
             )
             _state.update {
                 it.copy(
                     currentChat = it.currentChat.copy(
                         chatId = chatId
                     ),
+//                    updateChat = it.updateChat.not()
+                )
+            }
+            _uiState.update {
+                it.copy(
                     inputText = "",
                     isLoading = false,
                 )
             }
+
         } catch (e: Exception) {
             // Handle error (e.g., logging, showing a toast, etc.)
         }
@@ -154,10 +176,12 @@ class MessageViewModel @Inject constructor(
 
 data class MessageState(
     val currentChat: Chat = Chat(),
+    val updateChat: Boolean = false,
+)
+
+data class UIState(
     val isLoading: Boolean = false,
-    val currentUserId: String = "",
-    val response: GenerateContentResponse? = null,
     val text: String = "",
     val inputText: String = "",
-//    val messages: List<Message> = emptyList() // List to hold chat messages
 )
+

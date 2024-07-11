@@ -1,5 +1,6 @@
 package com.fredy.mysavings.DI
 
+import com.fredy.askquestions.features.data.database.room.ChattingDatabase
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.fredy.askquestions.features.domain.repositories.UserRepository
 import com.fredy.askquestions.features.domain.usecases.AuthUseCases.AuthUseCases
@@ -73,6 +74,7 @@ object UseCasesModule {
     @Provides
     @Singleton
     fun provideChatUseCases(
+        chattingDatabase: ChattingDatabase,
         chatRepository: ChatRepository,
         userRepository: UserRepository
     ): ChatUseCases = ChatUseCases(
@@ -87,11 +89,11 @@ object UseCasesModule {
         ),
         searchChats = SearchChats(chatRepository),
         getAllMessagesInChat = GetAllMessagesInChat(
-            chatRepository,userRepository
+            chattingDatabase,chatRepository,userRepository
         ),
         deleteMessage = DeleteMessage(
             chatRepository
-        )
+        ),
     )
 
 }

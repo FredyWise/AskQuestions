@@ -1,7 +1,7 @@
 package com.fredy.askquestions.features.data.database.firebase
 
 
-import com.fredy.askquestions.features.data.apis.ApiConfiguration
+import com.fredy.askquestions.features.data.Util.Configuration
 import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Filter
@@ -22,7 +22,7 @@ interface MessageDataSource {
     fun getPagerMessagesFromChat(
         chatId: String,
         lastMessageTime: Timestamp? = null,
-        limit: Long = 20,
+        limit: Int = 20,
     ): Flow<List<MessageCollection>>
 
     fun searchMessages(
@@ -35,7 +35,7 @@ class MessageDataSourceImpl(
 ): MessageDataSource {
 
     private val messageCollection = firestore.collection(
-        ApiConfiguration.FirebaseModel.MESSAGE_ENTITY
+        Configuration.FirebaseModel.MESSAGE_ENTITY
     )
 
     override suspend fun upsertMessage(
@@ -96,16 +96,16 @@ class MessageDataSourceImpl(
     override fun getPagerMessagesFromChat(
         chatId: String,
         lastMessageTime: Timestamp?,
-        limit: Long,
+        limit: Int,
     ): Flow<List<MessageCollection>> {
         return try {
-            Timber.d("getPagerMessagesFromChat.start: $chatId")
+            Timber.d("DataSource.getPagerMessagesFromChat.start: $chatId")
             val querySnapshot = messageCollection.whereEqualTo(
                 "chatId", chatId
             ).orderBy(
                 "timestamp",
                 Query.Direction.DESCENDING
-            ).limit(limit)
+            ).limit(limit.toLong())
 
             val lastMessageQuery = if (lastMessageTime == null) {
                 querySnapshot.snapshots()
@@ -116,12 +116,12 @@ class MessageDataSourceImpl(
             }
 
             lastMessageQuery.map {
-                Timber.d("getPagerMessagesFromChat.result: ${it.toObjects<MessageCollection>()}")
+                Timber.d("DataSource.getPagerMessagesFromChat.result: ${it.toObjects<MessageCollection>()}")
                 it.toObjects<MessageCollection>()
             }
         } catch (e: Exception) {
             Timber.e(
-                "Failed to get all message: ${e.message}"
+                "DataSource.getPagerMessagesFromChat.error: ${e.message}"
             )
             throw e
         }

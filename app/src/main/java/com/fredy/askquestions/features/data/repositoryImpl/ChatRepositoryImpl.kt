@@ -3,6 +3,8 @@ package com.fredy.askquestions.features.data.repositoryImpl
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
 import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
+import com.fredy.askquestions.features.data.database.room.dao.MessageDao
+import com.fredy.askquestions.features.data.mappers.toMessageEntity
 import com.fredy.askquestions.features.domain.models.Chat
 import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class ChatRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val chatDataSource: ChatDataSource,
-    private val messageDataSource: MessageDataSource
+    private val messageDataSource: MessageDataSource,
+    private val messageDao: MessageDao
 ): ChatRepository {
     override suspend fun upsertChat(chat: Chat): String {
         return withContext(Dispatchers.IO) {
@@ -52,6 +55,7 @@ class ChatRepositoryImpl @Inject constructor(
             messageDataSource.upsertMessage(
                 tempMessage
             )
+            messageDao.upsertMessage(tempMessage.toMessageEntity())
         }
     }
 
@@ -89,12 +93,14 @@ class ChatRepositoryImpl @Inject constructor(
 
     override fun getAllMessagesInTheSameChat(
         chatId: String,
-        lastMessageTime: Timestamp?
+        lastMessageTime: Timestamp?,
+        limit: Int,
     ): Flow<List<MessageCollection>> {
         Timber.d("ChatRepositoryImpl.getAllMessagesInTheSameChat.start: $chatId")
         return messageDataSource.getPagerMessagesFromChat(
             chatId = chatId,
             lastMessageTime = lastMessageTime,
+            limit = limit
         )
     }
 

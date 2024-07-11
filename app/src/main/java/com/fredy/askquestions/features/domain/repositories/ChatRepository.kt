@@ -17,7 +17,8 @@ interface ChatRepository {
     fun searchMessages(messageName: String): Flow<List<MessageCollection>>
     fun getAllMessagesInTheSameChat(
         chatId: String,
-        lastMessageTime: Timestamp? = null
+        lastMessageTime: Timestamp? = null,
+        limit: Int = 20
     ): Flow<List<MessageCollection>>
 
 }

@@ -10,13 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.fredy.askquestions.features.ui.screens.chatScreen.ChatScreen
 import com.fredy.askquestions.features.ui.screens.chatScreen.MessageScreen
 import com.fredy.askquestions.features.ui.screens.navigationComponent.MainScreen
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
-import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatViewModel
-import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageEvent
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
 
@@ -62,7 +59,7 @@ fun NavGraphBuilder.mainNavGraph(
             )
         ) {
             val viewModel: MessageViewModel = hiltViewModel()
-            val state by viewModel.state.collectAsStateWithLifecycle()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
             val messages = viewModel.message.collectAsLazyPagingItems()
             MessageScreen(
                 state = state,

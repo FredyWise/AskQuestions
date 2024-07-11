@@ -1,6 +1,9 @@
 package com.fredy.askquestions.di
 
 import android.content.Context
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.room.Room
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSourceImpl
@@ -12,6 +15,8 @@ import com.fredy.askquestions.features.data.database.room.ChattingDatabase
 import com.fredy.askquestions.features.data.database.room.dao.ChatDao
 import com.fredy.askquestions.features.data.database.room.dao.MessageDao
 import com.fredy.askquestions.features.data.database.room.dao.UserDao
+import com.fredy.askquestions.features.data.pagingSource.MessageRemoteMediator
+import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -40,13 +45,11 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideChatDao(savingsDatabase: ChattingDatabase): ChatDao =
-        savingsDatabase.chatDao
+    fun provideChatDao(savingsDatabase: ChattingDatabase): ChatDao = savingsDatabase.chatDao
 
     @Provides
     @Singleton
-    fun provideMessageDao(savingsDatabase: ChattingDatabase): MessageDao =
-        savingsDatabase.messageDao
+    fun provideMessageDao(savingsDatabase: ChattingDatabase): MessageDao = savingsDatabase.messageDao
 
     @Provides
     @Singleton

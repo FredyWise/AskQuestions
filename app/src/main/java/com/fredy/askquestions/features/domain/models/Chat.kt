@@ -18,4 +18,5 @@ data class Chat(
             lastMessageTime = messageCollection.timestamp,
         )
     }
+
 }

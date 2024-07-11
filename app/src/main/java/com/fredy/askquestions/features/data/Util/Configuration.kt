@@ -1,9 +1,9 @@
-package com.fredy.askquestions.features.data.apis
+package com.fredy.askquestions.features.data.Util
 
 import com.fredy.askquestions.BuildConfig
 
 
-sealed class ApiConfiguration {
+sealed class Configuration {
     object GeminiModel{
         const val API_KEY = BuildConfig.GEMINI_API_KEY
         const val FLASH_MODEL_1_5 = "gemini-1.5-flash"
@@ -21,6 +21,14 @@ sealed class ApiConfiguration {
 
     object AppData{
         const val AppVersion = BuildConfig.VERSION_NAME
+    }
+
+    object Debug{
+        const val DEBUG = true
+    }
+
+    object UIConfig{
+        const val MessageLimit = 20
     }
 
 }

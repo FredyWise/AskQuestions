@@ -6,7 +6,8 @@ import com.google.firebase.Timestamp
 
 @Entity
 data class ChatEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    val primaryKey: Int = 0,
     val chatId: String = "", // Unique identifier for the chat
     val chatName: String? = null, // Chat name (optional for group chats)
     val imageUrl: String? = null, // URL of the chat image (optional)

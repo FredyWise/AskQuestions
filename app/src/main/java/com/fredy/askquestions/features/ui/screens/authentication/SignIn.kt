@@ -38,8 +38,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.fredy.askquestions.features.data.apis.ApiConfiguration
+import com.fredy.askquestions.features.data.Util.Configuration
 import com.fredy.askquestions.features.data.enums.AuthMethod
 import com.fredy.askquestions.features.domain.util.Resource.Resource
 import com.fredy.askquestions.features.ui.screens.authentication.CustomTextField
@@ -56,7 +55,6 @@ import timber.log.Timber
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignIn(
-    navController: NavHostController,
     buttonColor: Color = MaterialTheme.colorScheme.primary.copy(
         0.4f
     ),
@@ -277,7 +275,7 @@ fun SignIn(
                 val gso = GoogleSignInOptions.Builder(
                     GoogleSignInOptions.DEFAULT_SIGN_IN
                 ).requestEmail().requestIdToken(
-                    ApiConfiguration.WebClient.ID
+                    Configuration.WebClient.ID
                 ).build()
 
                 val googleSignInClient = GoogleSignIn.getClient(

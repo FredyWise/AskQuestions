@@ -4,6 +4,7 @@ import android.content.Context
 import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
 import com.fredy.askquestions.features.data.database.firebase.UserDataSource
+import com.fredy.askquestions.features.data.database.room.dao.MessageDao
 import com.fredy.askquestions.features.data.repositoryImpl.ChatRepositoryImpl
 import com.fredy.askquestions.features.data.repositoryImpl.PreferencesRepositoryImpl
 import com.fredy.askquestions.features.data.repositoryImpl.UserRepositoryImpl
@@ -45,10 +46,12 @@ object RepositoryModule {
         firebaseAuth: FirebaseAuth,
         chatDataSource: ChatDataSource,
         messageDataSource: MessageDataSource,
+        messageDao: MessageDao,
     ): ChatRepository = ChatRepositoryImpl(
         firebaseAuth,
         chatDataSource,
-        messageDataSource
+        messageDataSource,
+        messageDao
     )
 
 }

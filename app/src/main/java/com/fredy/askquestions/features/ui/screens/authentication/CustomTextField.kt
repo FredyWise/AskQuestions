@@ -20,12 +20,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomTextField(
+    modifier: Modifier = Modifier,
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String = "",
     enabled: Boolean = true,
-    modifier: Modifier = Modifier,
     singleLine: Boolean = true,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardType: KeyboardType = KeyboardType.Text,
