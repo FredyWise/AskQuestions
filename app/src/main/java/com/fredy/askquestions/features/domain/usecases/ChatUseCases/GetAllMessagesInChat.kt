@@ -4,7 +4,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.insertHeaderItem
 import androidx.paging.map
 import com.fredy.askquestions.features.data.Util.Configuration
 import com.fredy.askquestions.features.data.database.room.ChattingDatabase
@@ -39,7 +38,7 @@ class GetAllMessagesInChat(
                     chatId
                 )
             },
-        ).flow.collect {pagingData ->
+        ).flow.collect { pagingData ->
             emit(pagingData.map {
                 Timber.e("message: $it")
                 it.toMessage(
@@ -50,3 +49,9 @@ class GetAllMessagesInChat(
         }
     }
 }
+//{
+//            MessagePagingSource(
+//                chatRepository,
+//                chatId
+//            )
+//}

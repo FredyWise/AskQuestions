@@ -12,6 +12,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import com.fredy.askquestions.features.domain.models.Message
 
 @Composable
@@ -21,7 +22,7 @@ fun MessageBody(
 ) {
     val lazyListState = rememberLazyListState()
 
-    LaunchedEffect(messages) {
+    LaunchedEffect(messages, messages.itemCount) {
         if (messages.itemCount > 0) lazyListState.animateScrollToItem(
             0
         )
@@ -33,7 +34,7 @@ fun MessageBody(
     ) {
         items(
             messages.itemCount,
-            key = { it },
+            key = messages.itemKey { it.timestamp },
         ) {
             messages[it]?.let {message ->
                 MessageBubble(

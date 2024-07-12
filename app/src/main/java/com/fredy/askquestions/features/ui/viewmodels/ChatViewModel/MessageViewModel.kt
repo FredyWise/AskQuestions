@@ -57,6 +57,13 @@ class MessageViewModel @Inject constructor(
         }
     }
 
+//    private val _newMessageList = _state.flatMapLatest {
+//        chatUseCases.getNewMessagesInChat(it.currentChat.chatId).stateIn(
+//            viewModelScope,
+//            SharingStarted.WhileSubscribed(),
+//            PagingData.empty()
+//        )
+//    }
 
     private val _messageList = _state.flatMapLatest {
         chatUseCases.getAllMessagesInChat(it.currentChat.chatId).stateIn(

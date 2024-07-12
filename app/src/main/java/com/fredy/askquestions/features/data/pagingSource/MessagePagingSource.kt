@@ -13,20 +13,47 @@ import com.fredy.askquestions.features.data.mappers.toMessageEntity
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.first
-import timber.log.Timber
 import java.io.IOException
-//
-//class MessagePagingSource (
+
+//class MessagePagingSource(
 //    private val chatRepository: ChatRepository,
 //    private val chatId: String,
-//) : PagingSource<Timestamp, MessageCollection>() {
+//): PagingSource<Timestamp, MessageCollection>() {
+////    override fun getRefreshKey(state: PagingState<Timestamp, MessageCollection>): Timestamp? {
+////        return null
+////    }
 //    override fun getRefreshKey(state: PagingState<Timestamp, MessageCollection>): Timestamp? {
-//        return null
+//        return state.anchorPosition?.let { anchorPosition ->
+//            state.closestPageToPosition(anchorPosition)?.let { anchorPage ->
+//                val pageIndex = state.pages.indexOf(anchorPage)
+//                if (pageIndex == 0) {
+//                    null
+//                } else {
+//                    state.pages[pageIndex - 1].nextKey
+//                }
+//            }
+//        }
 //    }
-//
 //    override suspend fun load(params: LoadParams<Timestamp>): LoadResult<Timestamp, MessageCollection> {
 //        return try {
-//            val currentPage = chatRepository.getAllMessagesInTheSameChat(chatId,params.key).first()
+////            lateinit var result: LoadResult<Timestamp, MessageCollection>
+////
+////            chatRepository.getAllMessagesInTheSameChat(
+////                chatId,
+////                params.key
+////            ).collect { currentPage ->
+////                val nextPage = currentPage.last().timestamp
+////                result = LoadResult.Page(
+////                    data = currentPage,
+////                    prevKey = null,
+////                    nextKey = nextPage
+////                )
+////            }
+////            result
+//            val currentPage = chatRepository.getAllMessagesInTheSameChat(
+//                chatId,
+//                params.key
+//            ).first()
 //            val nextPage = currentPage.last().timestamp
 //            LoadResult.Page(
 //                data = currentPage,
@@ -52,33 +79,45 @@ class MessageRemoteMediator(
     ): MediatorResult {
 
         return try {
-            val loadKey = when(loadType) {
+            val loadKey = when (loadType) {
                 LoadType.REFRESH -> null
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
+
                 LoadType.APPEND -> {
+                    if (state.lastItemOrNull() == null) {
+                        return MediatorResult.Success(
+                            endOfPaginationReached = true
+                        )
+                    }
                     state.lastItemOrNull()?.timestamp
                 }
             }
 
-            val messages = chatRepository.getAllMessagesInTheSameChat(chatId,loadKey,state.config.pageSize).first()
+            val messages = chatRepository.getAllMessagesInTheSameChat(
+                chatId,
+                loadKey,
+                state.config.pageSize
+            ).first()
 
             chattingDb.withTransaction {
-                if(loadType == LoadType.REFRESH) {
+                if (loadType == LoadType.REFRESH) {
                     chattingDb.messageDao.clearAllMessages()
                 }
                 val messageEntities = messages.map { it.toMessageEntity() }
-                chattingDb.messageDao.upsertAllMessages(messageEntities)
+                chattingDb.messageDao.upsertAllMessages(
+                    messageEntities
+                )
             }
 
             MediatorResult.Success(
                 endOfPaginationReached = messages.isEmpty()
             )
 
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             MediatorResult.Error(e)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             MediatorResult.Error(e)
         }
     }
