@@ -124,6 +124,8 @@ dependencies {
 //        exclude(module = "guava-jdk5")
     }
 
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
 
     // Room database
     implementation(libs.androidx.room.ktx)

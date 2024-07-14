@@ -12,7 +12,7 @@ interface ChatRepository {
     fun getAllChatsOrderedByName(): Flow<List<Chat>>
     fun searchChats(chatName: String): Flow<List<Chat>>
 
-    suspend fun upsertMessage(messageCollection: MessageCollection)
+    suspend fun upsertMessage(messageCollection: MessageCollection):String
     suspend fun deleteMessage(messageCollection: MessageCollection)
     fun searchMessages(messageName: String): Flow<List<MessageCollection>>
     fun getAllMessagesInTheSameChat(

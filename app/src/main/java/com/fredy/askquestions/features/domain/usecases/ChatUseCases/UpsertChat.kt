@@ -6,7 +6,7 @@ import com.fredy.askquestions.features.domain.repositories.ChatRepository
 class UpsertChat(
     private val chatRepository: ChatRepository
 ) {
-    suspend operator fun invoke(chat: Chat) {
-        chatRepository.upsertChat(chat)
+    suspend operator fun invoke(chat: Chat):String {
+        return chatRepository.upsertChat(chat)
     }
 }

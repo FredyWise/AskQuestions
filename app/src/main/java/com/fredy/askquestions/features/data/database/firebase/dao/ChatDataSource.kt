@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.data.database.firebase
+package com.fredy.askquestions.features.data.database.firebase.dao
 
 
 import com.fredy.askquestions.features.data.Util.Configuration

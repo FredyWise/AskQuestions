@@ -34,7 +34,7 @@ fun MessageBody(
     ) {
         items(
             messages.itemCount,
-            key = messages.itemKey { it.timestamp },
+            key = messages.itemKey { it.messageId },
         ) {
             messages[it]?.let {message ->
                 MessageBubble(

@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.data.database.firebase
+package com.fredy.askquestions.features.data.database.firebase.dao
 
 
 import com.fredy.askquestions.features.data.Util.Configuration
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface MessageDataSource {
-    suspend fun upsertMessage(messageCollection: MessageCollection)
+    suspend fun upsertMessage(messageCollection: MessageCollection): String
     suspend fun deleteMessage(messageCollection: MessageCollection)
     fun getMessagesFromChat(chatId: String): Flow<List<MessageCollection>>
     fun getPagerMessagesFromChat(
@@ -40,8 +40,8 @@ class MessageDataSourceImpl(
 
     override suspend fun upsertMessage(
         messageCollection: MessageCollection
-    ) {
-        withContext(Dispatchers.IO) {
+    ): String {
+        return withContext(Dispatchers.IO) {
             val realMessage = if (messageCollection.messageId.isEmpty()) {
                 val newMessageRef = this@MessageDataSourceImpl.messageCollection.document()
                 messageCollection.copy(
@@ -55,6 +55,7 @@ class MessageDataSourceImpl(
             ).set(
                 realMessage
             )
+            realMessage.messageId
         }
     }
 
@@ -127,6 +128,42 @@ class MessageDataSourceImpl(
         }
 
     }
+
+//    override fun getPagerMessagesFromChat(
+//        chatId: String,
+//        messageId: String?,
+//        limit: Int,
+//    ): Flow<List<MessageCollection>> {
+//        return try {
+//            Timber.d("DataSource.getPagerMessagesFromChat.start: $chatId")
+//            val querySnapshot = messageCollection.whereEqualTo(
+//                "chatId", chatId
+//            ).orderBy(
+//                "timestamp",
+//                Query.Direction.DESCENDING
+//            ).limit(limit.toLong())
+//
+//            val lastMessageQuery = if (messageId == null) {
+//                querySnapshot.snapshots()
+//            } else {
+//                val result = messageCollection.document(messageId).get().result
+//                querySnapshot.startAfter(
+//                    result
+//                ).snapshots()
+//            }
+//
+//            lastMessageQuery.map {
+//                Timber.d("DataSource.getPagerMessagesFromChat.result: ${it.toObjects<MessageCollection>()}")
+//                it.toObjects<MessageCollection>()
+//            }
+//        } catch (e: Exception) {
+//            Timber.e(
+//                "DataSource.getPagerMessagesFromChat.error: ${e.message}"
+//            )
+//            throw e
+//        }
+//
+//    }
 
 
     override fun searchMessages(

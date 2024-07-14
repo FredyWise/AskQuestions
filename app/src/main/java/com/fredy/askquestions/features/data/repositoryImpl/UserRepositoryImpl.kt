@@ -1,6 +1,6 @@
 package com.fredy.askquestions.features.data.repositoryImpl
 
-import com.fredy.askquestions.features.data.database.firebase.UserDataSource
+import com.fredy.askquestions.features.data.database.firebase.dao.UserDataSource
 import com.fredy.askquestions.features.domain.models.User
 import com.fredy.askquestions.features.domain.util.Resource.DataError
 import com.fredy.askquestions.features.domain.util.Resource.Resource

@@ -1,9 +1,9 @@
 package com.fredy.mysavings.DI
 
 import android.content.Context
-import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
-import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
-import com.fredy.askquestions.features.data.database.firebase.UserDataSource
+import com.fredy.askquestions.features.data.database.firebase.dao.ChatDataSource
+import com.fredy.askquestions.features.data.database.firebase.dao.MessageDataSource
+import com.fredy.askquestions.features.data.database.firebase.dao.UserDataSource
 import com.fredy.askquestions.features.data.database.room.dao.MessageDao
 import com.fredy.askquestions.features.data.repositoryImpl.ChatRepositoryImpl
 import com.fredy.askquestions.features.data.repositoryImpl.PreferencesRepositoryImpl

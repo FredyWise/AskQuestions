@@ -37,6 +37,10 @@ class GetAllMessagesInChat(
                 chattingDatabase.messageDao.getPagingSource(
                     chatId
                 )
+//            MessagePagingSource(
+//                chatRepository,
+//                chatId
+//            )
             },
         ).flow.collect { pagingData ->
             emit(pagingData.map {
@@ -49,9 +53,3 @@ class GetAllMessagesInChat(
         }
     }
 }
-//{
-//            MessagePagingSource(
-//                chatRepository,
-//                chatId
-//            )
-//}

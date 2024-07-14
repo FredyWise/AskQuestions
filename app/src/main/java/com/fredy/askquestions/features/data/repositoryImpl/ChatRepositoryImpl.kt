@@ -1,12 +1,11 @@
 package com.fredy.askquestions.features.data.repositoryImpl
 
-import com.fredy.askquestions.features.data.database.firebase.ChatDataSource
-import com.fredy.askquestions.features.data.database.firebase.MessageDataSource
+import com.fredy.askquestions.features.data.database.firebase.dao.ChatDataSource
+import com.fredy.askquestions.features.data.database.firebase.dao.MessageDataSource
 import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.data.database.room.dao.MessageDao
 import com.fredy.askquestions.features.data.mappers.toMessageEntity
 import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -45,17 +44,18 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun upsertMessage(
         messageCollection: MessageCollection
-    ) {
-        withContext(Dispatchers.IO) {
+    ): String {
+       return withContext(Dispatchers.IO) {
             val currentUser = firebaseAuth.currentUser!!
             val tempMessage = if (messageCollection.senderId.isEmpty()) messageCollection.copy(
                 senderId = currentUser.uid
             ) else messageCollection
             Timber.d("ChatRepositoryImpl.upsertMessage: $tempMessage")
-            messageDataSource.upsertMessage(
+            val messageId = messageDataSource.upsertMessage(
                 tempMessage
             )
-            messageDao.upsertMessage(tempMessage.toMessageEntity())
+            messageDao.upsertMessage(tempMessage.copy(messageId = messageId).toMessageEntity())
+            messageId
         }
     }
 

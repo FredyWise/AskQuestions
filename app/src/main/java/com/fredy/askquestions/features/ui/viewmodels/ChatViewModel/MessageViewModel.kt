@@ -48,7 +48,8 @@ class MessageViewModel @Inject constructor(
                     chat?.let { chat ->
                         _state.update {
                             it.copy(
-                                currentChat = chat
+                                currentChat = chat,
+                                updateChat = it.updateChat.not()
                             )
                         }
                     }
@@ -176,8 +177,6 @@ class MessageViewModel @Inject constructor(
             // Handle error (e.g., logging, showing a toast, etc.)
         }
     }
-
-
 }
 
 
