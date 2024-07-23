@@ -40,7 +40,6 @@ class MessageViewModel @Inject constructor(
 
     val uiState = _uiState.asStateFlow()
 
-
     init {
         viewModelScope.launch {
             savedStateHandle.get<String>("chatId")?.let { chatId ->
