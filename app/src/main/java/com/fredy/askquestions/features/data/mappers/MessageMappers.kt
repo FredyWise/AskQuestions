@@ -1,7 +1,7 @@
 package com.fredy.askquestions.features.data.mappers
 
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
-import com.fredy.askquestions.features.data.database.room.models.MessageEntity
+import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
+import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
 import com.fredy.askquestions.features.domain.models.Message
 
 fun MessageCollection.toMessage(userId: String): Message {

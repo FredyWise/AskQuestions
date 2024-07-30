@@ -24,9 +24,11 @@ import com.fredy.askquestions.features.domain.usecases.UserUseCases.GetUser
 import com.fredy.askquestions.features.domain.usecases.UserUseCases.InsertUser
 import com.fredy.askquestions.features.domain.usecases.UserUseCases.SearchUsers
 import com.fredy.askquestions.features.domain.usecases.UserUseCases.UpdateUser
+import com.fredy.askquestions.features.domain.usecases.UserUseCases.UploadProfilePicture
 import com.fredy.askquestions.features.domain.usecases.UserUseCases.UserUseCases
 import com.fredy.mysavings.Feature.Domain.UseCases.UserUseCases.GetAllUsersOrderedByName
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,10 +58,11 @@ object UseCasesModule {
     @Provides
     @Singleton
     fun provideUserUseCases(
-        userRepository: UserRepository
+        userRepository: UserRepository,
+        firebaseMessaging: FirebaseMessaging
     ): UserUseCases = UserUseCases(
-        insertUser = InsertUser(userRepository),
-        updateUser = UpdateUser(userRepository),
+        insertUser = InsertUser(userRepository,firebaseMessaging),
+        updateUser = UpdateUser(userRepository,firebaseMessaging),
         deleteUser = DeleteUser(userRepository),
         getUser = GetUser(userRepository),
         getCurrentUser = GetCurrentUser(
@@ -68,7 +71,8 @@ object UseCasesModule {
         getAllUsersOrderedByName = GetAllUsersOrderedByName(
             userRepository
         ),
-        searchUsers = SearchUsers(userRepository)
+        searchUsers = SearchUsers(userRepository),
+        uploadProfilePicture = UploadProfilePicture()
     )
 
     @Provides

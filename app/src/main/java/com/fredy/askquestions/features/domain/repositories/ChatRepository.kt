@@ -1,6 +1,6 @@
 package com.fredy.askquestions.features.domain.repositories
 
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
+import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.fredy.askquestions.features.domain.models.Chat
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.Flow

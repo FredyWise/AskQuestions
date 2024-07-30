@@ -2,7 +2,7 @@ package com.fredy.askquestions.features.data.database.firebase.dao
 
 
 import com.fredy.askquestions.features.data.Util.Configuration
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
+import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore

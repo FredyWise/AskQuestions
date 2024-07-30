@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.fredy.askquestions.features.data.database.room.models.UserEntity
+import com.fredy.askquestions.features.data.database.room.dto.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

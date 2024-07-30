@@ -9,7 +9,8 @@ data class UserUseCases(
     val getUser: GetUser,
     val getCurrentUser: GetCurrentUser,
     val getAllUsersOrderedByName: GetAllUsersOrderedByName,
-    val searchUsers: SearchUsers
+    val searchUsers: SearchUsers,
+    val uploadProfilePicture: UploadProfilePicture
 )
 
 

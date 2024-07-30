@@ -2,7 +2,7 @@ package com.fredy.askquestions.features.data.repositoryImpl
 
 import com.fredy.askquestions.features.data.database.firebase.dao.ChatDataSource
 import com.fredy.askquestions.features.data.database.firebase.dao.MessageDataSource
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
+import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.fredy.askquestions.features.data.database.room.dao.MessageDao
 import com.fredy.askquestions.features.data.mappers.toMessageEntity
 import com.fredy.askquestions.features.domain.models.Chat

@@ -6,14 +6,13 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
+import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.fredy.askquestions.features.data.database.room.ChattingDatabase
-import com.fredy.askquestions.features.data.database.room.models.MessageEntity
+import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
 import com.fredy.askquestions.features.data.mappers.toMessageEntity
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.first
-import timber.log.Timber
 import java.io.IOException
 
 class MessagePagingSource(

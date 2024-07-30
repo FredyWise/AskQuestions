@@ -1,6 +1,6 @@
 package com.fredy.askquestions.features.domain.usecases.ChatUseCases
 
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
+import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 
 class DeleteMessage(

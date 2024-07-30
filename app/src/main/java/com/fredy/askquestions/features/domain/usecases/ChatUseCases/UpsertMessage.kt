@@ -1,7 +1,6 @@
 package com.fredy.askquestions.features.domain.usecases.ChatUseCases
 
 import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.data.database.firebase.models.MessageCollection
 import com.fredy.askquestions.features.data.mappers.toMessageCollection
 import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository

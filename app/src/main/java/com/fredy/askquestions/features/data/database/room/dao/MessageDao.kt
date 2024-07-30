@@ -8,8 +8,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
-import com.fredy.askquestions.features.data.database.room.models.MessageEntity
-import com.google.firebase.Timestamp
+import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

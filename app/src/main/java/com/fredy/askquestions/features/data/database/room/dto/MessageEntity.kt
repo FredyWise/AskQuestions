@@ -1,10 +1,10 @@
-package com.fredy.askquestions.features.data.database.firebase.models
+package com.fredy.askquestions.features.data.database.room.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 @Entity
-data class MessageCollection(
+data class MessageEntity(
     @PrimaryKey
     val messageId: String = "",
     val senderId: String = "",

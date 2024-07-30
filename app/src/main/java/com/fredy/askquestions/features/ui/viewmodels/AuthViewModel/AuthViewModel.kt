@@ -18,6 +18,7 @@ import com.fredy.askquestions.features.domain.util.Resource.Resource
 import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -65,7 +66,7 @@ class AuthViewModel @Inject constructor(
                         event.credential
                     ).collect { result ->
                         if (result is Resource.Success) {
-                            insertUser(result)
+                            userUseCases.insertUser(result.data.user)
                             _state.update {
                                 it.copy(isSignedIn = true)
                             }
@@ -127,7 +128,7 @@ class AuthViewModel @Inject constructor(
                         event.code
                     ).collect { result ->
                         if (result is Resource.Success) {
-                            insertUser(result)
+                            userUseCases.insertUser(result.data.user)
                             _state.update {
                                 it.copy(isSignedIn = true)
                             }
@@ -146,7 +147,7 @@ class AuthViewModel @Inject constructor(
                 viewModelScope.launch {
                     _state.value.signedInUser!!.run {
                         val profilePictureUrl = if (event.photoUrl != Uri.EMPTY) {
-                            uploadProfilePicture(
+                            userUseCases.uploadProfilePicture(
                                 uid,
                                 event.photoUrl
                             )
@@ -319,48 +320,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private suspend fun insertUser(
-        result: Resource.Success<AuthResult, DataError.Authentication>,
-        photoUri: Uri = Uri.EMPTY
-    ) {
-        val user = result.data.user
-        user?.run {
-            val profilePictureUrl = if (photoUri != Uri.EMPTY) {
-                uploadProfilePicture(
-                    uid, photoUri
-                )
-            } else {
-                photoUrl.toString()
-            }
-            userUseCases.insertUser(
-                User(
-                    uid = uid,
-                    username = displayName,
-                    email = email,
-                    phone = phoneNumber,
-                    profilePictureUrl = profilePictureUrl
-                )
-            )
-        }
-
-    }
-
-    private suspend fun uploadProfilePicture(
-        uid: String, imageUri: Uri
-    ): String {
-        return try {
-            val storageRef = Firebase.storage.reference
-            val profilePictureRef = storageRef.child(
-                "profile_pictures/$uid.jpg"
-            )
-            val downloadUri = profilePictureRef.putFile(
-                imageUri
-            ).await().storage.downloadUrl.await()
-            downloadUri.toString()
-        } catch (e: Exception) {
-            throw e
-        }
-    }
 
 
 }
