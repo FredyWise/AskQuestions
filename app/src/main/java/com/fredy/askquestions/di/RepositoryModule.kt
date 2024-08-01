@@ -46,11 +46,13 @@ object RepositoryModule {
         firebaseAuth: FirebaseAuth,
         chatDataSource: ChatDataSource,
         messageDataSource: MessageDataSource,
+        userDataSource: UserDataSource,
         messageDao: MessageDao,
     ): ChatRepository = ChatRepositoryImpl(
         firebaseAuth,
         chatDataSource,
         messageDataSource,
+        userDataSource,
         messageDao
     )
 

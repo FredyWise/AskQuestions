@@ -6,47 +6,57 @@ import com.fredy.askquestions.features.domain.models.Message
 
 fun MessageCollection.toMessage(userId: String): Message {
     return Message(
-        messageId = this.messageId,
-        senderId = this.senderId,
-        chatId = this.chatId,
-        text = this.text,
-        mediaUrls = this.mediaUrls,
-        timestamp = this.timestamp,
-        isUser = this.senderId == userId
+        messageId = messageId,
+        senderId = senderId,
+        chatId = chatId,
+        text = text,
+        mediaUrls = mediaUrls,
+        timestamp = timestamp,
+        isUser = senderId == userId
     )
 }
 
 fun MessageCollection.toMessageEntity(): MessageEntity {
     return MessageEntity(
-        messageId = this.messageId,
-        senderId = this.senderId,
-        chatId = this.chatId,
-        text = this.text,
-        mediaUrls = this.mediaUrls,
-        timestamp = this.timestamp,
+        messageId = messageId,
+        senderId = senderId,
+        chatId = chatId,
+        text = text,
+        mediaUrls = mediaUrls,
+        timestamp = timestamp,
     )
 }
 
-fun MessageEntity.toMessage(userId: String): Message{
+fun MessageEntity.toMessage(userId: String): Message {
     return Message(
-        messageId = this.messageId,
-        senderId = this.senderId,
-        chatId = this.chatId,
-        text = this.text,
-        mediaUrls = this.mediaUrls,
-        timestamp = this.timestamp,
-        isUser = this.senderId == userId
+        messageId = messageId,
+        senderId = senderId,
+        chatId = chatId,
+        text = text,
+        mediaUrls = mediaUrls,
+        timestamp = timestamp,
+        isUser = senderId == userId
     )
 }
 
-fun Message.toMessageCollection(): MessageCollection{
+fun Message.toMessageCollection(): MessageCollection {
     return MessageCollection(
-        messageId = this.messageId,
-        senderId = this.senderId,
-        chatId = this.chatId,
-        text = this.text,
-        mediaUrls = this.mediaUrls,
-        timestamp = this.timestamp,
+        messageId = messageId,
+        senderId = senderId,
+        chatId = chatId,
+        text = text,
+        mediaUrls = mediaUrls,
+        timestamp = timestamp,
     )
+}
 
+fun Message.toMessageEntity(): MessageEntity {
+    return MessageEntity(
+        messageId = messageId,
+        senderId = senderId,
+        chatId = chatId,
+        text = text,
+        mediaUrls = mediaUrls,
+        timestamp = timestamp,
+    )
 }

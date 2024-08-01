@@ -14,6 +14,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.fredy.askquestions.features.ui.screens.chatScreen.ChatScreen
 import com.fredy.askquestions.features.ui.screens.chatScreen.MessageScreen
+import com.fredy.askquestions.features.ui.screens.contactScreen.ContactScreen
 import com.fredy.askquestions.features.ui.screens.navigationComponent.MainScreen
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
@@ -53,10 +54,10 @@ fun BottomBarNavGraph(
         ) {
 //            val viewModel: ContactsViewModel = hiltViewModel()
 //            val state by viewModel.state.collectAsStateWithLifecycle()
-//            ContactScreen(
+            ContactScreen(
 //                state = state,
 //                onEvent = viewModel::onEvent,
-//            )
+            )
         }
 
     }

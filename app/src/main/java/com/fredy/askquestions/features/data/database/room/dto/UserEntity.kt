@@ -12,5 +12,4 @@ data class UserEntity(
     val email: String? = null,
     val notificationKey: String? = null,
     val profilePictureUrl: String? = null,
-    val selected: Boolean = false
 )

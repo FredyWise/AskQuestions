@@ -2,6 +2,7 @@ package com.fredy.askquestions.features.data.database.firebase.dao
 
 
 import com.fredy.askquestions.features.data.Util.Configuration
+import com.fredy.askquestions.features.data.database.firebase.dto.ChatCollection
 import com.fredy.askquestions.features.domain.models.Chat
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,13 +18,13 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface ChatDataSource {
-    suspend fun upsertChat(chat: Chat): String
-    suspend fun deleteChat(chat: Chat)
-    suspend fun getChat(chatId: String): Chat?
-    fun getAllChatsOrderedByName(userId: String): Flow<List<Chat>>
+    suspend fun upsertChat(chat: ChatCollection): String
+    suspend fun deleteChat(chat: ChatCollection)
+    suspend fun getChat(chatId: String): ChatCollection?
+    fun getAllChatsOrderedByName(userId: String): Flow<List<ChatCollection>>
     fun searchChats(
         chatName: String, userId: String
-    ): Flow<List<Chat>>
+    ): Flow<List<ChatCollection>>
 }
 
 class ChatDataSourceImpl(
@@ -34,7 +35,7 @@ class ChatDataSourceImpl(
         Configuration.FirebaseModel.CHAT_ENTITY
     )
 
-    override suspend fun upsertChat(chat: Chat): String {
+    override suspend fun upsertChat(chat: ChatCollection): String {
         return withContext(Dispatchers.IO) {
             val realChat = if (chat.chatId.isEmpty()) {
                 val newChatRef = chatCollection.document()
@@ -56,16 +57,16 @@ class ChatDataSourceImpl(
 
     }
 
-    override suspend fun deleteChat(chat: Chat) {
+    override suspend fun deleteChat(chat: ChatCollection) {
         withContext(Dispatchers.IO) {
             chatCollection.document(chat.chatId).delete()
         }
     }
 
-    override suspend fun getChat(chatId: String): Chat? {
+    override suspend fun getChat(chatId: String): ChatCollection? {
         return withContext(Dispatchers.IO) {
             try {
-                chatCollection.document(chatId).get().await().toObject<Chat>()
+                chatCollection.document(chatId).get().await().toObject<ChatCollection>()
             } catch (e: Exception) {
                 Timber.e(
                     "Failed to get chat: ${e.message}"
@@ -78,7 +79,7 @@ class ChatDataSourceImpl(
 
     override fun getAllChatsOrderedByName(
         userId: String
-    ): Flow<List<Chat>> {
+    ): Flow<List<ChatCollection>> {
         return try {
             val querySnapshot = chatCollection.whereArrayContains(
                 "participants", userId
@@ -87,7 +88,7 @@ class ChatDataSourceImpl(
                 Query.Direction.ASCENDING
             ).snapshots()
 
-            querySnapshot.map { it.toObjects<Chat>() }
+            querySnapshot.map { it.toObjects<ChatCollection>() }
         } catch (e: Exception) {
             Timber.e(
                 "Failed to get all chat: ${e.message}"
@@ -98,7 +99,7 @@ class ChatDataSourceImpl(
 
     override fun searchChats(
         chatName: String, userId: String
-    ): Flow<List<Chat>> {
+    ): Flow<List<ChatCollection>> {
         return try {
             val querySnapshot = chatCollection.whereArrayContains(
                 "participants",
@@ -112,7 +113,7 @@ class ChatDataSourceImpl(
                 Query.Direction.ASCENDING
             ).snapshots()
 
-            querySnapshot.map { it.toObjects<Chat>() }
+            querySnapshot.map { it.toObjects<ChatCollection>() }
         } catch (e: Exception) {
             Timber.e(
                 "Failed to get all chat: ${e.message}"

@@ -6,10 +6,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.fredy.askquestions.features.data.database.room.ChattingDatabase
 import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
 import com.fredy.askquestions.features.data.mappers.toMessageEntity
+import com.fredy.askquestions.features.domain.models.Message
 import com.fredy.askquestions.features.domain.repositories.ChatRepository
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.flow.first
@@ -18,11 +18,11 @@ import java.io.IOException
 class MessagePagingSource(
     private val chatRepository: ChatRepository,
     private val chatId: String,
-): PagingSource<Timestamp, MessageCollection>() {
-//    override fun getRefreshKey(state: PagingState<Timestamp, MessageCollection>): Timestamp? {
+): PagingSource<Timestamp, Message>() {
+//    override fun getRefreshKey(state: PagingState<Timestamp, Message>): Timestamp? {
 //        return null
 //    }
-    override fun getRefreshKey(state: PagingState<Timestamp, MessageCollection>): Timestamp? {
+    override fun getRefreshKey(state: PagingState<Timestamp, Message>): Timestamp? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.let { anchorPage ->
                 val pageIndex = state.pages.indexOf(anchorPage)
@@ -34,9 +34,9 @@ class MessagePagingSource(
             }
         }
     }
-    override suspend fun load(params: LoadParams<Timestamp>): LoadResult<Timestamp, MessageCollection> {
+    override suspend fun load(params: LoadParams<Timestamp>): LoadResult<Timestamp, Message> {
         return try {
-//            lateinit var result: LoadResult<Timestamp, MessageCollection>
+//            lateinit var result: LoadResult<Timestamp, Message>
 //
 //            chatRepository.getAllMessagesInTheSameChat(
 //                chatId,

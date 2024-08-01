@@ -10,12 +10,12 @@ data class Chat(
     val lastMessageText: String? = null, // Last message text
     val lastMessageTime: Timestamp? = null, // Time of the last message
     val lastMessageSender: String? = null, // Sender of the last message
-    val participants: List<String> = emptyList() // List of participants id in the chat
+    val participants: List<User> = emptyList() // List of participants id in the chat
 ) {
-    fun updateLastMessage(messageCollection: MessageCollection): Chat {
+    fun updateLastMessage(message: Message): Chat {
         return this.copy(
-            lastMessageText = messageCollection.text,
-            lastMessageTime = messageCollection.timestamp,
+            lastMessageText = message.text,
+            lastMessageTime = message.timestamp,
         )
     }
 

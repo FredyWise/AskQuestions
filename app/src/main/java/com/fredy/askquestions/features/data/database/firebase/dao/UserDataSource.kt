@@ -2,6 +2,7 @@ package com.fredy.askquestions.features.data.database.firebase.dao
 
 
 import com.fredy.askquestions.features.data.Util.Configuration
+import com.fredy.askquestions.features.data.database.firebase.dto.UserCollection
 import com.fredy.askquestions.features.domain.models.User
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,11 +18,12 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 interface UserDataSource {
-    suspend fun upsertUser(user: User)
-    suspend fun deleteUser(user: User)
-    suspend fun getUser(userId: String): User?
-    suspend fun getAllUsersOrderedByName(): Flow<List<User>>
-    suspend fun searchUsers(usernameEmail: String): Flow<List<User>>
+    suspend fun upsertUser(user: UserCollection)
+    suspend fun deleteUser(user: UserCollection)
+    suspend fun getUser(userId: String): UserCollection?
+    suspend fun getParticipants(userIdList: List<String>): Flow<List<UserCollection>>
+    suspend fun getAllUsersOrderedByName(): Flow<List<UserCollection>>
+    suspend fun searchUsers(usernameEmail: String): Flow<List<UserCollection>>
 }
 
 class UserDataSourceImpl(
@@ -31,22 +33,22 @@ class UserDataSourceImpl(
     private val userCollection = firestore.collection(
         Configuration.FirebaseModel.USER_ENTITY)
 
-    override suspend fun upsertUser(user: User) {
+    override suspend fun upsertUser(user: UserCollection) {
         withContext(Dispatchers.IO) {
             userCollection.document(user.uid).set(user)
         }
     }
 
-    override suspend fun deleteUser(user: User) {
+    override suspend fun deleteUser(user: UserCollection) {
         withContext(Dispatchers.IO) {
             userCollection.document(user.uid).delete()
         }
     }
 
-    override suspend fun getUser(userId: String): User? {
+    override suspend fun getUser(userId: String): UserCollection? {
         return withContext(Dispatchers.IO) {
             try {
-                userCollection.document(userId).get().await().toObject<User>()
+                userCollection.document(userId).get().await().toObject<UserCollection>()
             } catch (e: Exception) {
                 Timber.e(
                     "Failed to get user: ${e.message}"
@@ -54,17 +56,33 @@ class UserDataSourceImpl(
                 throw e
             }
         }
-
     }
 
-    override suspend fun getAllUsersOrderedByName(): Flow<List<User>> {
+    override suspend fun getParticipants(userIdList: List<String>): Flow<List<UserCollection>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val querySnapshot = userCollection.whereIn("uid", userIdList).orderBy(
+                    "username", Query.Direction.ASCENDING
+                ).snapshots()
+
+                querySnapshot.map { it.toObjects<UserCollection>() }
+            } catch (e: Exception) {
+                Timber.e(
+                    "Failed to get all user: ${e.message}"
+                )
+                throw e
+            }
+        }
+    }
+
+    override suspend fun getAllUsersOrderedByName(): Flow<List<UserCollection>> {
         return withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = userCollection.orderBy(
                     "username", Query.Direction.ASCENDING
                 ).snapshots()
 
-                querySnapshot.map { it.toObjects<User>() }
+                querySnapshot.map { it.toObjects<UserCollection>() }
             } catch (e: Exception) {
                 Timber.e(
                     "Failed to get all user: ${e.message}"
@@ -75,7 +93,7 @@ class UserDataSourceImpl(
 
     }
 
-    override suspend fun searchUsers(usernameEmail: String): Flow<List<User>> {
+    override suspend fun searchUsers(usernameEmail: String): Flow<List<UserCollection>> {
         return withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = userCollection.where(
@@ -90,7 +108,7 @@ class UserDataSourceImpl(
                     "username", Query.Direction.ASCENDING
                 ).snapshots()
 
-                querySnapshot.map { it.toObjects<User>() }
+                querySnapshot.map { it.toObjects<UserCollection>() }
             } catch (e: Exception) {
                 Timber.e(
                     "Failed to get all user: ${e.message}"

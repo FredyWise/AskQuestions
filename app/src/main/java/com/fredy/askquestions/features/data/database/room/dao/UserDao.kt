@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
 import com.fredy.askquestions.features.data.database.room.dto.UserEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -20,6 +21,10 @@ interface UserDao {
 
     @Query("SELECT * FROM UserEntity WHERE uid = :userId")
     suspend fun getUser(userId: String): UserEntity?
+
+
+    @Query("SELECT * FROM UserEntity WHERE uid = :uid ORDER BY username ASC")
+    fun getParticipants(uid: String): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM UserEntity ORDER BY username ASC")
     fun getAllUsersOrderedByName(): Flow<List<UserEntity>>

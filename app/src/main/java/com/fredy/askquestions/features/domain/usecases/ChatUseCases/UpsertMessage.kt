@@ -10,11 +10,10 @@ class UpsertMessage(
     private val chatRepository: ChatRepository
 ) {
     suspend operator fun invoke(chat: Chat, message: Message) : String{
-        val messageCollection = message.toMessageCollection()
-        val chatId = chatRepository.upsertChat(chat.updateLastMessage(messageCollection))
-        Timber.d("Upsert message: $messageCollection")
+        val chatId = chatRepository.upsertChat(chat.updateLastMessage(message))
+        Timber.d("Upsert message: $message")
         chatRepository.upsertMessage(
-            messageCollection.copy(chatId = chatId)
+            message.copy(chatId = chatId)
         )
         return chatId
     }

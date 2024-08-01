@@ -1,6 +1,8 @@
 package com.fredy.askquestions.features.data.repositoryImpl
 
 import com.fredy.askquestions.features.data.database.firebase.dao.UserDataSource
+import com.fredy.askquestions.features.data.mappers.toUser
+import com.fredy.askquestions.features.data.mappers.toUserCollection
 import com.fredy.askquestions.features.domain.models.User
 import com.fredy.askquestions.features.domain.util.Resource.DataError
 import com.fredy.askquestions.features.domain.util.Resource.Resource
@@ -10,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,13 +23,13 @@ class UserRepositoryImpl @Inject constructor(
 ): UserRepository {
     override suspend fun upsertUser(user: User) {
         withContext(Dispatchers.IO) {
-            userDataSource.upsertUser(user)
+            userDataSource.upsertUser(user.toUserCollection())
         }
     }
 
     override suspend fun deleteUser(user: User) {
         withContext(Dispatchers.IO) {
-            userDataSource.deleteUser(user)
+            userDataSource.deleteUser(user.toUserCollection())
         }
     }
 
@@ -35,7 +38,7 @@ class UserRepositoryImpl @Inject constructor(
             val user = withContext(Dispatchers.IO) {
                 userDataSource.getUser(userId)
             }
-            emit(user)
+            emit(user?.toUser())
         }
     }
 
@@ -46,7 +49,7 @@ class UserRepositoryImpl @Inject constructor(
             val user = withContext(Dispatchers.IO) {
                 userDataSource.getUser(currentUser.uid)
             }
-            emit(Resource.Success(user))
+            emit(Resource.Success(user?.toUser()))
         }
     }.catch { e ->
         Timber.i(
@@ -57,16 +60,16 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUser() = userDataSource.getUser(
         firebaseAuth.currentUser?.uid ?: "-1"
-    )
+    )?.toUser()
 
     override suspend fun getAllUsersOrderedByName(): Flow<List<User>> {
-        return userDataSource.getAllUsersOrderedByName()
+        return userDataSource.getAllUsersOrderedByName().map { users -> users.map { it.toUser() } }
     }
 
     override suspend fun searchUsers(usernameEmail: String): Flow<List<User>> {
         return userDataSource.searchUsers(
             usernameEmail
-        )
+        ).map { users -> users.map { it.toUser() } }
     }
 
 }
