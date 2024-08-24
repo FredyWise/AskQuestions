@@ -34,15 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.fredy.askquestions.features.data.database.converters.TimestampConverter
 import com.fredy.askquestions.features.domain.models.Chat
-import com.fredy.askquestions.features.ui.screens.comonComponents.Templates.AnimatedFloatingActionButton
-import com.fredy.askquestions.features.ui.screens.comonComponents.Templates.PullToRefreshLazyColumn
-import com.fredy.askquestions.features.ui.screens.comonComponents.Templates.SingleLineText
+import com.fredy.theme.components.AnimatedFloatingActionButton
+import com.fredy.theme.components.PullToRefreshLazyColumn
+import com.fredy.theme.components.SingleLineText
 import com.fredy.askquestions.features.ui.util.formatTime
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.ChatViewModel
 import kotlinx.coroutines.delay
@@ -158,7 +157,8 @@ fun ChatListItem(
                             Color(0xFF957fef)
                         )
                         .size(40.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.
+                    Center
                 ) {
                     Text(
                         text = chat.chatName.first().toString(),

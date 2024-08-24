@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,9 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.fredy.askquestions.features.domain.models.Message
-import com.fredy.askquestions.features.ui.screens.comonComponents.Templates.AnimatedFloatingActionButton
+import com.fredy.theme.components.AnimatedFloatingActionButton
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageEvent
-import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageState
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.UIState
 import kotlinx.coroutines.launch
 

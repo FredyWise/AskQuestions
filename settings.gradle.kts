@@ -20,6 +20,9 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Ask Questions"
+rootProject.name = "AskQuestions"
 include(":app")
- 
+include(":theme")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+include(":features:auth")
+include(":core")

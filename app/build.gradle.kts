@@ -1,33 +1,36 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.gms.google-services")
-    id("kotlin-kapt")
+    alias(libs.plugins.google.gms.google.services)
+//    alias(libs.plugins.kotlin.kapt)
+//    alias(libs.plugins.dagger.hilt.android.plugin)
+    kotlin("kapt")
     id("dagger.hilt.android.plugin")
 }
 
 android {
     namespace = "com.fredy.askquestions"
-    compileSdk = 34
+//    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.fredy.askquestions"
-        minSdk = 29
-        targetSdk = 34
+//        minSdk = 29
+//        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-
+//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+//        vectorDrawables {
+//            useSupportLibrary = true
+//        }
+//
         buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyAMoEvv_H_iRQmR6AMAs1UO2YfDK0GmmFk\"")
         buildConfigField("String", "WEB_CLIENT_ID", "\"528731901652-ctno5eh7o5k43lnc7fc2s51ldbhvkp55.apps.googleusercontent.com\"")
     }
 
     buildFeatures {
-        buildConfig = true
+        buildConfig = true //this corresponds to b
+        compose = true
     }
 
     buildTypes {
@@ -39,28 +42,27 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_17
+//        targetCompatibility = JavaVersion.VERSION_17
+//    }
+//    kotlinOptions {
+//        jvmTarget = "17"
+//    }
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = libs.versions.composeCompilerExtension.get()
+//    }
+//    packaging {
+//        resources {
+//            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+//        }
+//    }
 }
 
 dependencies {
 
+    implementation(projects.theme)
+    implementation(projects.features.auth)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -69,9 +71,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.compose.material)
-    implementation(libs.firebase.messaging)
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -107,6 +109,7 @@ dependencies {
     // Google
     // Firebase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)

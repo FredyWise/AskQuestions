@@ -12,7 +12,7 @@ import androidx.navigation.navArgument
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.fredy.askquestions.features.ui.screens.chatScreen.MessageScreen
 import com.fredy.askquestions.features.ui.screens.navigationComponent.MainScreen
-import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
+import com.fredy.askquestions.auth.viewModel.AuthEvent
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.ChatViewModel.MessageViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel

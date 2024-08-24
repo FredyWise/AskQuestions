@@ -9,6 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fredy.askquestions.auth.viewModel.AuthEvent
+import com.fredy.askquestions.auth.viewModel.AuthState
 import com.fredy.askquestions.features.data.enums.AuthMethod
 import com.fredy.askquestions.features.domain.models.User
 import com.fredy.askquestions.features.domain.usecases.AuthUseCases.AuthUseCases
@@ -16,10 +18,6 @@ import com.fredy.askquestions.features.domain.usecases.UserUseCases.UserUseCases
 import com.fredy.askquestions.features.domain.util.Resource.DataError
 import com.fredy.askquestions.features.domain.util.Resource.Resource
 import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
-import com.google.firebase.Firebase
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.storage.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +25,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 

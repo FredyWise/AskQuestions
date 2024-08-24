@@ -50,8 +50,8 @@
 //import coil.compose.rememberAsyncImagePainter
 //import com.fredy.askquestions.features.domain.models.User
 //import com.fredy.askquestions.features.ui.screens.authentication.CustomTextField
-//import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
-//import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthState
+//import com.fredy.askquestions.auth.AuthViewModel.AuthEvent
+//import com.fredy.askquestions.auth.AuthViewModel.AuthState
 //import com.fredy.mysavings.Feature.Domain.Model.UserData
 //import com.fredy.mysavings.Util.Log
 //import com.fredy.mysavings.Feature.Domain.Util.Resource

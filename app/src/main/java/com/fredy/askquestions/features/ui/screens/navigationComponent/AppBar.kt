@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.fredy.askquestions.features.domain.models.User
 import com.fredy.askquestions.features.ui.screens.comonComponents.Handler.AsyncImageHandler
-import com.fredy.askquestions.features.ui.screens.comonComponents.Templates.AppBarTemplate
+import com.fredy.theme.components.AppBarTemplate
 
 @Composable
 fun AppBar(

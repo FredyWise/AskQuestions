@@ -2,6 +2,7 @@ package com.fredy.askquestions.features.ui.viewmodels.AuthViewModel
 
 import android.content.Context
 import android.net.Uri
+import com.fredy.askquestions.auth.viewModel.AuthEvent
 import com.google.firebase.auth.AuthCredential
 
 

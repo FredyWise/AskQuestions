@@ -44,8 +44,8 @@ import com.fredy.askquestions.features.domain.util.Resource.Resource
 import com.fredy.askquestions.features.ui.screens.authentication.CustomTextField
 import com.fredy.askquestions.features.ui.screens.authentication.GoogleButton
 import com.fredy.askquestions.features.ui.util.isValidPhoneNumber
-import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
-import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthState
+import com.fredy.askquestions.auth.viewModel.AuthEvent
+import com.fredy.askquestions.auth.viewModel.AuthState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException

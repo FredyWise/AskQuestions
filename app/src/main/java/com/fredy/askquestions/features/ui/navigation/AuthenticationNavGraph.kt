@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.fredy.askquestions.features.domain.util.Resource.Resource
 import com.fredy.askquestions.features.ui.util.navigateZeroTopTo
-import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthEvent
+import com.fredy.askquestions.auth.viewModel.AuthEvent
 import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
 import com.fredy.askquestions.features.ui.viewmodels.PreferencesViewModel.PreferencesViewModel
 import com.fredy.mysavings.Feature.Presentation.Screens.Authentication.SignIn
@@ -35,7 +35,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                 key1 = state.bioAuthResource,
             ) {
                 when (state.bioAuthResource) {
-                    is Resource.Error -> {
+                    is Resource.Error<> -> {
                         val error = " state.bioAuthResource.error.name"
                         Toast.makeText(
                             context,
