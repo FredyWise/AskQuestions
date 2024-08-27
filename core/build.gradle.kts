@@ -7,14 +7,10 @@ plugins {
 
 android {
     namespace = "com.fredy.core"
-    compileSdk = 34
 
     defaultConfig {
-        minSdk = 29
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-
+        buildConfigField("String", "VERSION_NAME", "\"0.0.1\"")
         buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyAMoEvv_H_iRQmR6AMAs1UO2YfDK0GmmFk\"")
         buildConfigField("String", "WEB_CLIENT_ID", "\"528731901652-ctno5eh7o5k43lnc7fc2s51ldbhvkp55.apps.googleusercontent.com\"")
     }
@@ -24,22 +20,6 @@ android {
         compose = true
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 dependencies {
@@ -59,17 +39,47 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.compose.material)
 
+    // Advanced Log
+    implementation(libs.timber)
+
+    // Google apis
+    implementation(libs.generativeai)
+    implementation(libs.play.services.auth)
+    implementation("com.google.api-client:google-api-client-android:1.26.0") {
+        exclude(group = "org.apache.httpcomponents")
+//        exclude(module = "guava-jdk5")
+    }
+    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0") {
+        exclude(group = "org.apache.httpcomponents")
+//        exclude(module = "guava-jdk5")
+    }
+
     // Firebase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.auth.ktx)
 
     // DataStore Preferences
     implementation(libs.androidx.datastore.preferences)
 
+    // Room database
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.paging)
+
+    // Retrofit networking
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.converter.gson)
 
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+
 }

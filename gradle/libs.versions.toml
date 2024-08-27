@@ -44,6 +44,9 @@ daggerHiltAndroidPlugin = "2.45"
 composeCompilerExtension = "1.4.3"
 appcompat = "1.7.0"
 material = "1.12.0"
+firebaseAuthKtx = "23.0.0"
+pagingCommonAndroid = "3.3.2"
+firebaseMessagingKtxVersion = "24.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -98,6 +101,9 @@ androidx-compose-material = { group = "androidx.wear.compose", name = "compose-m
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+google-firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
+com-google-firebase-firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

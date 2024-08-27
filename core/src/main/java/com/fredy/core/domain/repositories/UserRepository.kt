@@ -1,8 +1,9 @@
-package com.fredy.askquestions.features.domain.repositories
+package com.fredy.core.domain.repositories
 
-import com.fredy.askquestions.features.domain.models.User
-import com.fredy.askquestions.features.domain.util.Resource.DataError
-import com.fredy.askquestions.features.domain.util.Resource.Resource
+import com.fredy.core.domain.models.User
+import com.fredy.core.util.resource.DataError
+import com.fredy.core.util.resource.Resource
+
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

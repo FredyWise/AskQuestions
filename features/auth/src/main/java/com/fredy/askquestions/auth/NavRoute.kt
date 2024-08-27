@@ -5,9 +5,6 @@ import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.automirrored.outlined.Login
 import androidx.compose.ui.graphics.vector.ImageVector
 
-//object Graph {
-//    const val AuthNav = "auth_nav"
-//}
 
 sealed class AuthNavigationRoute(
     val route: String,

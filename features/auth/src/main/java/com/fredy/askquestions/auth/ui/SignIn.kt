@@ -38,12 +38,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.fredy.core.data.Util.Configuration
-import com.fredy.askquestions.features.data.enums.AuthMethod
-import com.fredy.askquestions.features.domain.util.Resource.Resource
-import com.fredy.askquestions.features.ui.util.isValidPhoneNumber
+import com.fredy.askquestions.auth.data.AuthMethod
+import com.fredy.core.data.util.Configuration
+
+
 import com.fredy.askquestions.auth.viewModel.AuthEvent
 import com.fredy.askquestions.auth.viewModel.AuthState
+import com.fredy.askquestions.features.ui.util.isValidPhoneNumber
+import com.fredy.core.util.resource.Resource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException

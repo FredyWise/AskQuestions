@@ -48,7 +48,7 @@ package com.fredy.askquestions.auth.ui//package com.fredy.mysavings.Feature.Pres
 //import androidx.navigation.NavController
 //import coil.compose.AsyncImage
 //import coil.compose.rememberAsyncImagePainter
-//import com.fredy.askquestions.features.domain.models.User
+//import com.fredy.core.domain.models.User
 //import com.fredy.askquestions.features.ui.screens.authentication.CustomTextField
 //import com.fredy.askquestions.auth.AuthViewModel.AuthEvent
 //import com.fredy.askquestions.auth.AuthViewModel.AuthState

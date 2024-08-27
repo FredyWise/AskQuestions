@@ -11,11 +11,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.fredy.askquestions.auth.viewModel.AuthEvent
 import com.fredy.askquestions.auth.ui.SignIn
-import com.fredy.askquestions.features.ui.viewmodels.AuthViewModel.AuthViewModel
+import com.fredy.askquestions.auth.viewModel.AuthViewModel
 import com.fredy.core.navigation.Graph
 import com.fredy.core.navigation.utils.navigateZeroTopTo
-import com.fredy.core.resource.Resource
-
+import com.fredy.core.util.resource.Resource
 
 fun NavGraphBuilder.authenticationNavGraph(
     isUsingBioAuth: Boolean,
@@ -31,49 +30,18 @@ fun NavGraphBuilder.authenticationNavGraph(
         ) {
             val state by viewModel.state.collectAsStateWithLifecycle()
             val context = LocalContext.current
+            val authResource = state.authResource
             LaunchedEffect(
-                key1 = state.bioAuthResource,
+                key1 = authResource,
             ) {
-                when (state.bioAuthResource) {
-                    is Resource.Error -> {
-                        val error = " state.bioAuthResource.error.name"
-                        Toast.makeText(
-                            context,
-                            "${error}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-
-                    is Resource.Success -> {
-                        Toast.makeText(
-                            context,
-                            "state.bioAuthResource.data",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        viewModel.onEvent(
-                            AuthEvent.GetCurrentUser
-                        )
-                        rootNavController.navigateZeroTopTo(
-                            Graph.MainNav
-                        )
-                    }
-
-                    else -> {
-                    }
-                }
-            }
-            LaunchedEffect(
-                key1 = state.authResource,
-            ) {
-                when (state.authResource) {
+                when (authResource) {
                     is Resource.Error -> {
                         viewModel.onEvent(
                             AuthEvent.SignOut
                         )
-                        val error = "state.authResource.message"
                         Toast.makeText(
                             context,
-                            "${error}",
+                            authResource.error.name,
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -81,7 +49,7 @@ fun NavGraphBuilder.authenticationNavGraph(
                     is Resource.Success -> {
                         Toast.makeText(
                             context,
-                            "SignIn Success",
+                            authResource.data,
                             Toast.LENGTH_SHORT
                         ).show()
                         viewModel.onEvent(

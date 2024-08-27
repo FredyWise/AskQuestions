@@ -1,8 +1,8 @@
-package com.fredy.askquestions.features.data.mappers
+package com.fredy.core.data.mappers
 
-import com.fredy.askquestions.features.data.database.firebase.dto.UserCollection
-import com.fredy.askquestions.features.data.database.room.dto.UserEntity
-import com.fredy.askquestions.features.domain.models.User
+import com.fredy.core.data.database.firebase.dto.UserCollection
+import com.fredy.core.data.database.room.dto.UserEntity
+import com.fredy.core.domain.models.User
 import com.google.firebase.auth.FirebaseUser
 
 fun FirebaseUser.toUser(): User {

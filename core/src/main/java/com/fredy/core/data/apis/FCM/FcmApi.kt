@@ -1,6 +1,6 @@
 package com.fredy.askquestions.features.data.apis.FCM
 
-import com.fredy.askquestions.features.data.apis.FCM.dto.SendMessage
+import com.fredy.core.data.apis.FCM.dto.SendMessage
 import retrofit2.http.Body
 import retrofit2.http.POST
 

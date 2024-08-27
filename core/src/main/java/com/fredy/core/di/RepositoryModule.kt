@@ -1,35 +1,18 @@
-package com.fredy.mysavings.DI
+package com.fredy.core.di
 
-import android.content.Context
-import com.fredy.askquestions.features.data.database.firebase.dao.ChatDataSource
-import com.fredy.askquestions.features.data.database.firebase.dao.MessageDataSource
-import com.fredy.askquestions.features.data.database.firebase.dao.UserDataSource
-import com.fredy.askquestions.features.data.database.room.dao.MessageDao
-import com.fredy.askquestions.features.data.repositoryImpl.ChatRepositoryImpl
-import com.fredy.askquestions.features.data.repositoryImpl.PreferencesRepositoryImpl
-import com.fredy.askquestions.features.data.repositoryImpl.UserRepositoryImpl
-import com.fredy.askquestions.features.domain.repositories.ChatRepository
-import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
-import com.fredy.askquestions.features.domain.repositories.UserRepository
+import com.fredy.core.data.database.firebase.dao.UserDataSource
+import com.fredy.core.data.repositoryImpl.UserRepositoryImpl
+import com.fredy.core.domain.repositories.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun provideSettingsRepository(
-        @ApplicationContext appContext: Context
-    ): PreferencesRepository = PreferencesRepositoryImpl(
-        appContext
-    )
 
     @Provides
     @Singleton
@@ -40,20 +23,5 @@ object RepositoryModule {
         firebaseAuth, userDataSource
     )
 
-    @Provides
-    @Singleton
-    fun provideChatRepository(
-        firebaseAuth: FirebaseAuth,
-        chatDataSource: ChatDataSource,
-        messageDataSource: MessageDataSource,
-        userDataSource: UserDataSource,
-        messageDao: MessageDao,
-    ): ChatRepository = ChatRepositoryImpl(
-        firebaseAuth,
-        chatDataSource,
-        messageDataSource,
-        userDataSource,
-        messageDao
-    )
 
 }

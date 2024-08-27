@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.data.database.room.dto
+package com.fredy.core.data.database.room.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

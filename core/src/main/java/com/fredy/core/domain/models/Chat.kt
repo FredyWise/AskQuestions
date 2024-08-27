@@ -1,6 +1,5 @@
-package com.fredy.askquestions.features.domain.models
+package com.fredy.core.domain.models
 
-import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
 import com.google.firebase.Timestamp
 
 data class Chat(

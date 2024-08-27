@@ -1,17 +1,17 @@
-package com.fredy.askquestions.features.data.database.room
+package com.fredy.core.data.database.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.fredy.askquestions.features.data.database.converters.DateTimeConverter
-import com.fredy.askquestions.features.data.database.converters.ParticipantsConverter
-import com.fredy.askquestions.features.data.database.converters.TimestampConverter
-import com.fredy.askquestions.features.data.database.room.dao.ChatDao
-import com.fredy.askquestions.features.data.database.room.dao.MessageDao
-import com.fredy.askquestions.features.data.database.room.dao.UserDao
-import com.fredy.askquestions.features.data.database.room.dto.ChatEntity
-import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
-import com.fredy.askquestions.features.data.database.room.dto.UserEntity
+import com.fredy.core.data.database.converters.DateTimeConverter
+import com.fredy.core.data.database.converters.ParticipantsConverter
+import com.fredy.core.data.database.converters.TimestampConverter
+import com.fredy.core.data.database.room.dao.ChatDao
+import com.fredy.core.data.database.room.dao.MessageDao
+import com.fredy.core.data.database.room.dao.UserDao
+import com.fredy.core.data.database.room.dto.ChatEntity
+import com.fredy.core.data.database.room.dto.MessageEntity
+import com.fredy.core.data.database.room.dto.UserEntity
 
 
 @TypeConverters(value = [ParticipantsConverter::class, TimestampConverter::class, DateTimeConverter::class])

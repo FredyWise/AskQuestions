@@ -1,11 +1,11 @@
-package com.fredy.askquestions.features.data.database.room.dao
+package com.fredy.core.data.database.room.dao
 
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.fredy.askquestions.features.data.database.room.dto.ChatEntity
+import com.fredy.core.data.database.room.dto.ChatEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

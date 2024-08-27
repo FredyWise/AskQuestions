@@ -1,12 +1,13 @@
-package com.fredy.askquestions.features.data.repositoryImpl
+package com.fredy.core.data.repositoryImpl
 
-import com.fredy.askquestions.features.data.database.firebase.dao.UserDataSource
-import com.fredy.askquestions.features.data.mappers.toUser
-import com.fredy.askquestions.features.data.mappers.toUserCollection
-import com.fredy.askquestions.features.domain.models.User
-import com.fredy.askquestions.features.domain.util.Resource.DataError
-import com.fredy.askquestions.features.domain.util.Resource.Resource
-import com.fredy.askquestions.features.domain.repositories.UserRepository
+import com.fredy.core.data.database.firebase.dao.UserDataSource
+import com.fredy.core.data.mappers.toUser
+import com.fredy.core.data.mappers.toUserCollection
+import com.fredy.core.domain.models.User
+
+import com.fredy.core.domain.repositories.UserRepository
+import com.fredy.core.util.resource.DataError
+import com.fredy.core.util.resource.Resource
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

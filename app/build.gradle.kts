@@ -10,22 +10,12 @@ plugins {
 
 android {
     namespace = "com.fredy.askquestions"
-//    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.fredy.askquestions"
-//        minSdk = 29
-//        targetSdk = 34
+
         versionCode = 1
         versionName = "1.0"
-
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        vectorDrawables {
-//            useSupportLibrary = true
-//        }
-//
-        buildConfigField("String", "GEMINI_API_KEY", "\"AIzaSyAMoEvv_H_iRQmR6AMAs1UO2YfDK0GmmFk\"")
-        buildConfigField("String", "WEB_CLIENT_ID", "\"528731901652-ctno5eh7o5k43lnc7fc2s51ldbhvkp55.apps.googleusercontent.com\"")
     }
 
     buildFeatures {
@@ -42,27 +32,15 @@ android {
             )
         }
     }
-//    compileOptions {
-//        sourceCompatibility = JavaVersion.VERSION_17
-//        targetCompatibility = JavaVersion.VERSION_17
-//    }
-//    kotlinOptions {
-//        jvmTarget = "17"
-//    }
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = libs.versions.composeCompilerExtension.get()
-//    }
-//    packaging {
-//        resources {
-//            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-//        }
-//    }
 }
 
 dependencies {
 
+    implementation(projects.core)
     implementation(projects.theme)
     implementation(projects.features.auth)
+    implementation(projects.features.chat)
+    implementation(projects.features.preferences)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -95,7 +73,6 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
 
     // AI dependencies
-    implementation(libs.generativeai)
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -105,28 +82,29 @@ dependencies {
 
     // DataStore Preferences
     implementation(libs.androidx.datastore.preferences)
-
-    // Google
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
-    implementation(libs.firebase.messaging.ktx)
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.storage.ktx)
-    implementation(libs.firebase.auth.ktx)
-    //
-    implementation(libs.google.firebase.messaging.ktx)
-
-    // Google apis
-    implementation(libs.play.services.auth)
-    implementation("com.google.api-client:google-api-client-android:1.26.0") {
-        exclude(group = "org.apache.httpcomponents")
-//        exclude(module = "guava-jdk5")
-    }
-    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0") {
-        exclude(group = "org.apache.httpcomponents")
-//        exclude(module = "guava-jdk5")
-    }
+//
+//    // Google
+//    // Firebase
+//    implementation(platform(libs.firebase.bom))
+//    implementation(libs.firebase.messaging)
+//    implementation(libs.firebase.messaging.ktx)
+//    implementation(libs.firebase.firestore.ktx)
+//    implementation(libs.firebase.storage.ktx)
+//    implementation(libs.firebase.auth.ktx)
+//    //
+//    implementation(libs.google.firebase.messaging.ktx)
+//
+//    // Google apis
+//    implementation(libs.generativeai)
+//    implementation(libs.play.services.auth)
+//    implementation("com.google.api-client:google-api-client-android:1.26.0") {
+//        exclude(group = "org.apache.httpcomponents")
+////        exclude(module = "guava-jdk5")
+//    }
+//    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0") {
+//        exclude(group = "org.apache.httpcomponents")
+////        exclude(module = "guava-jdk5")
+//    }
 
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)

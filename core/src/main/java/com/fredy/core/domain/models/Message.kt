@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.domain.models
+package com.fredy.core.domain.models
 
 import com.google.firebase.Timestamp
 

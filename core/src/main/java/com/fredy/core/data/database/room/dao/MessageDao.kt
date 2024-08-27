@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.data.database.room.dao
+package com.fredy.core.data.database.room.dao
 
 
 import androidx.paging.PagingSource
@@ -8,7 +8,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
-import com.fredy.askquestions.features.data.database.room.dto.MessageEntity
+import com.fredy.core.data.database.room.dto.MessageEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

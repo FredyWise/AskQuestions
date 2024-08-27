@@ -1,22 +1,18 @@
-package com.fredy.askquestions.features.ui.viewmodels.AuthViewModel
+package com.fredy.askquestions.auth.viewModel
 
 import android.content.Context
-import android.hardware.biometrics.BiometricPrompt
-import android.hardware.biometrics.BiometricPrompt.AuthenticationCallback
 import android.net.Uri
-import android.os.CancellationSignal
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fredy.askquestions.auth.viewModel.AuthEvent
-import com.fredy.askquestions.auth.viewModel.AuthState
-import com.fredy.askquestions.features.data.enums.AuthMethod
-import com.fredy.askquestions.features.domain.models.User
-import com.fredy.askquestions.features.domain.usecases.AuthUseCases.AuthUseCases
-import com.fredy.askquestions.features.domain.usecases.UserUseCases.UserUseCases
-import com.fredy.askquestions.features.domain.repositories.PreferencesRepository
-import com.fredy.core.resource.Resource
+import com.fredy.askquestions.auth.data.AuthMethod
+import com.fredy.askquestions.auth.domain.AuthUseCases
+import com.fredy.core.domain.models.User
+import com.fredy.core.domain.usecases.UserUseCases
+import com.fredy.core.util.resource.DataError
+import com.fredy.core.util.resource.Resource
+import com.fredy.core.util.resource.ResourceError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,17 +20,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    savedStateHandle: SavedStateHandle,
     private val authUseCases: AuthUseCases,
-    private val preferencesRepository: PreferencesRepository,
     private val userUseCases: UserUseCases,
     private val currentUserData: User?,
 ): ViewModel() {
+    private val bioAuthStatus = MutableStateFlow(
+        false
+    )
 
     private val storedVerificationId = MutableStateFlow(
         ""
@@ -52,6 +50,11 @@ class AuthViewModel @Inject constructor(
             }
             onEvent(AuthEvent.GetCurrentUser)
         }
+        viewModelScope.launch {
+            savedStateHandle.get<Boolean>("bioAuthStatus")?.let { stat ->
+                bioAuthStatus.update { stat }
+            }
+        }
     }
 
     fun onEvent(event: AuthEvent) {
@@ -61,17 +64,40 @@ class AuthViewModel @Inject constructor(
                     authUseCases.googleSignIn(
                         event.credential
                     ).collect { result ->
-                        if (result is Resource.Success) {
-                            userUseCases.insertUser(result.data.user)
-                            _state.update {
-                                it.copy(isSignedIn = true)
+                        when (result) {
+                            is Resource.Success -> {
+                                userUseCases.insertUser(
+                                    result.data.user
+                                )
+                                _state.update {
+                                    it.copy(
+                                        authResource = Resource.Success(
+                                            "Google Auth Success"
+                                        ),
+                                        isSignedIn = true,
+                                        authType = AuthMethod.Google
+                                    )
+                                }
                             }
-                        }
-                        _state.update {
-                            it.copy(
-                                authResource = result,
-                                authType = AuthMethod.Google
-                            )
+
+                            is Resource.Loading -> {
+                                _state.update {
+                                    it.copy(
+                                        authResource = Resource.Loading(),
+                                        authType = AuthMethod.Google
+                                    )
+                                }
+                            }
+
+                            is Resource.Error -> {
+
+                                _state.update {
+                                    it.copy(
+                                        authResource = Resource.Error(result.error),
+                                        authType = AuthMethod.Google
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -124,14 +150,18 @@ class AuthViewModel @Inject constructor(
                         event.code
                     ).collect { result ->
                         if (result is Resource.Success) {
-                            userUseCases.insertUser(result.data.user)
+                            userUseCases.insertUser(
+                                result.data.user
+                            )
                             _state.update {
                                 it.copy(isSignedIn = true)
                             }
                         }
                         _state.update {
                             it.copy(
-                                authResource = result,
+                                authResource = Resource.Success(
+                                    "Phone Number Auth Success"
+                                ),
                                 authType = AuthMethod.PhoneOTP
                             )
                         }
@@ -156,23 +186,19 @@ class AuthViewModel @Inject constructor(
                             event.oldPassword,
                             event.password
                         ).collect { updateResource ->
-                            when (updateResource) {
-                                is Resource.Success -> {
-                                    val user = User(
-                                        uid = uid,
-                                        username = event.username,
-                                        email = email,
-                                        phone = phone,
-                                        profilePictureUrl = profilePictureUrl
-                                    )
-                                    userUseCases.updateUser(
-                                        user
-                                    )
-                                }
-
-                                else -> {
-                                }
+                            if (updateResource is Resource.Success) {
+                                val user = User(
+                                    uid = uid,
+                                    username = event.username,
+                                    email = email,
+                                    phone = phone,
+                                    profilePictureUrl = profilePictureUrl
+                                )
+                                userUseCases.updateUser(
+                                    user
+                                )
                             }
+
                             _state.update {
                                 it.copy(
                                     updateResource = updateResource
@@ -187,22 +213,17 @@ class AuthViewModel @Inject constructor(
             AuthEvent.GetCurrentUser -> {
                 viewModelScope.launch {
                     userUseCases.getCurrentUser().collectLatest { currentUser ->
-                        when (currentUser) {
-                            is Resource.Success -> {
-                                currentUser.data?.let { user ->
-                                    _state.update {
-                                        it.copy(
-                                            signedInUser = user,
-                                            isSignedIn = true,
-                                            updateResource = Resource.Success(
-                                                ""
-                                            ),
-                                        )
-                                    }
+                        if (currentUser is Resource.Success) {
+                            currentUser.data?.let { user ->
+                                _state.update {
+                                    it.copy(
+                                        signedInUser = user,
+                                        isSignedIn = true,
+                                        updateResource = Resource.Success(
+                                            ""
+                                        ),
+                                    )
                                 }
-                            }
-
-                            else -> {
                             }
                         }
                     }
@@ -219,105 +240,30 @@ class AuthViewModel @Inject constructor(
             }
 
             AuthEvent.BioAuth -> {
-                if (preferencesRepository.bioAuthStatus() && currentUserData != null && state.value.isSignedIn) {
-                    val title = "Login"
-                    val subtitle = "Login into your account"
-                    val description = "Put your finger on the fingerprint sensor or scan your face to authorise your account."
-                    val negativeText = "Cancel"
-                    val executor = ContextCompat.getMainExecutor(
-                        context
-                    )
-                    val biometricPrompt = BiometricPrompt.Builder(
-                        context
-                    ).apply {
-                        setTitle(title)
-                        setSubtitle(subtitle)
-                        setDescription(
-                            description
-                        )
-                        setConfirmationRequired(
-                            false
-                        )
-                        setNegativeButton(
-                            negativeText, executor
-                        ) { _, _ ->
+                viewModelScope.launch {
+                    if (bioAuthStatus.value && currentUserData != null && state.value.isSignedIn) {
+                        authUseCases.bioAuth(
+                            context
+                        ).collectLatest { authResource ->
                             _state.update {
                                 it.copy(
-                                    bioAuthResource = Resource.Error(
-                                        DataError.Authentication.USER_CANCELLED
-                                    )
+                                    authResource = authResource
                                 )
                             }
                         }
-                    }.build()
-
-                    biometricPrompt.authenticate(
-                        CancellationSignal(),
-                        executor,
-                        object: AuthenticationCallback() {
-                            override fun onAuthenticationError(
-                                errorCode: Int,
-                                errString: CharSequence
-                            ) {
-                                super.onAuthenticationError(
-                                    errorCode,
-                                    errString
+                    } else {
+                        _state.update {
+                            it.copy(
+                                authResource = Resource.Error(
+                                    DataError.Authentication.INVALID_CREDENTIALS
                                 )
-                                Timber.e(
-                                    "onAuthenticationError:\n error code:$errorCode\n $errString",
-                                )
-                                _state.update {
-                                    it.copy(
-                                        bioAuthResource = Resource.Error(
-                                            DataError.Authentication.UNKNOWN
-                                        )
-                                    )
-                                }
-                            }
-
-                            override fun onAuthenticationSucceeded(
-                                result: BiometricPrompt.AuthenticationResult
-                            ) {
-                                super.onAuthenticationSucceeded(
-                                    result
-                                )
-                                _state.update {
-                                    it.copy(
-                                        bioAuthResource = Resource.Success(
-                                            "Bio Auth Success"
-                                        )
-                                    )
-                                }
-                            }
-
-                            override fun onAuthenticationFailed() {
-                                super.onAuthenticationFailed()
-                                _state.update {
-                                    it.copy(
-                                        bioAuthResource = Resource.Error(
-                                            DataError.Authentication.INVALID_CREDENTIALS
-                                        )
-                                    )
-                                }
-                            }
-                        },
-                    )
-                } else {
-                    _state.update {
-                        it.copy(
-                            bioAuthResource = Resource.Error(
-                                DataError.Authentication.INVALID_CREDENTIALS
                             )
-                        )
+                        }
                     }
                 }
             }
-
         }
     }
-
-
-
 }
 
 

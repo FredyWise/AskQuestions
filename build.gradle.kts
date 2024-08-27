@@ -23,6 +23,8 @@ fun BaseExtension.defaultConfig() {
         minSdk = 29
         targetSdk = 34
 
+        consumerProguardFiles("consumer-rules.pro")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true

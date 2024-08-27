@@ -1,4 +1,6 @@
-package com.fredy.askquestions.features.data.apis.FCM.dto
+package com.fredy.core.data.apis.FCM.dto
+
+import com.fredy.core.data.apis.FCM.dto.NotificationBody
 
 data class SendMessage (
     val to: String?,

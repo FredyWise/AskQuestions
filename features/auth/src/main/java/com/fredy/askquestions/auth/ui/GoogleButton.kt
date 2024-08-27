@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.fredy.askquestions.R
+import com.fredy.askquestions.auth.R
 
 @Composable
 fun GoogleButton(

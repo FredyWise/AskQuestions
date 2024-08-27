@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.data.database.converters
+package com.fredy.core.data.database.converters
 
 import androidx.room.TypeConverter
 import java.time.LocalDateTime

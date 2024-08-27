@@ -1,8 +1,8 @@
-package com.fredy.askquestions.features.data.database.firebase.dao
+package com.fredy.core.data.database.firebase.dao
 
 
-import com.fredy.core.data.Util.Configuration
-import com.fredy.askquestions.features.data.database.firebase.dto.MessageCollection
+import com.fredy.core.data.util.Configuration
+import com.fredy.core.data.database.firebase.dto.MessageCollection
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore

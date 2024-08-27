@@ -16,6 +16,7 @@ dependencies {
 
     implementation(projects.core)
     implementation(projects.theme)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -25,7 +26,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.compose.material)
-    implementation(libs.firebase.messaging)
 
     // Tests
     testImplementation(libs.junit)
@@ -36,8 +36,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Coil
-    implementation(libs.coil.compose)
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Advanced Log
     implementation(libs.timber)
@@ -45,27 +48,16 @@ dependencies {
     // Additional UI dependencies
     implementation(libs.androidx.material.icons.extended)
 
-//    // AI dependencies
-//    implementation(libs.generativeai)
-
-    // ViewModel
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Coil
+    implementation(libs.coil.compose)
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.runtime.compose.android)
 
-    // DataStore Preferences
-    implementation(libs.androidx.datastore.preferences)
-
     // Google
     // Firebase
-//    implementation(platform(libs.firebase.bom))
-//    implementation(libs.firebase.messaging.ktx)
-//    implementation(libs.firebase.firestore.ktx)
-//    implementation(libs.firebase.storage.ktx)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
-    //
-//    implementation(libs.google.firebase.messaging.ktx)
 
     // Google apis
     implementation(libs.play.services.auth)
@@ -77,19 +69,5 @@ dependencies {
         exclude(group = "org.apache.httpcomponents")
 //        exclude(module = "guava-jdk5")
     }
-
-    // Splash Screen
-    implementation(libs.androidx.core.splashscreen)
-
-    // Retrofit networking
-    implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-    implementation(libs.converter.gson)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.androidx.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
 }

@@ -1,4 +1,4 @@
-package com.fredy.core.data.Util
+package com.fredy.core.data.util
 
 import com.fredy.core.BuildConfig
 

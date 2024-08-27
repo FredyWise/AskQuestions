@@ -21,8 +21,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AskQuestions"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":theme")
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":features:auth")
 include(":core")
+include(":features:preferences")
+include(":features:chat")

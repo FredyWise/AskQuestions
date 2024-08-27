@@ -1,4 +1,4 @@
-package com.fredy.askquestions.features.data.database.firebase.dto
+package com.fredy.core.data.database.firebase.dto
 
 import com.google.firebase.Timestamp
 
