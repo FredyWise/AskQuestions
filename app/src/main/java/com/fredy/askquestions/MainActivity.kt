@@ -18,7 +18,7 @@ import com.fredy.askquestions.auth.viewModel.AuthEvent
 import com.fredy.askquestions.auth.viewModel.AuthViewModel
 import com.fredy.core.util.ActivityProvider
 import com.fredy.preferences.viewModel.PreferencesViewModel
-import com.fredy.theme.DefaultTheme
+import com.fredy.theme.compose.DefaultTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

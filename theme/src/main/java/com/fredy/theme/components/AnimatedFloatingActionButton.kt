@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.fredy.theme.DefaultTheme
+import com.fredy.theme.compose.DefaultTheme
 import com.fredy.theme.util.DefaultPreview
 
 @Composable

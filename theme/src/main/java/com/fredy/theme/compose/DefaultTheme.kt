@@ -1,4 +1,4 @@
-package com.fredy.theme
+package com.fredy.theme.compose
 
 import android.app.Activity
 import android.os.Build
